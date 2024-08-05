@@ -30,3 +30,7 @@ http://localhost:8080/parking-system/
 ## Database
 - Database name: parking
 - Table name: cars
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+```
