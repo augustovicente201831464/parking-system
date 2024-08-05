@@ -19,3 +19,6 @@ Then open the browser and go to the following link
 ```bash
 http://localhost:8080/parking-system/
 ```
+
+## Technologies
+- Java
