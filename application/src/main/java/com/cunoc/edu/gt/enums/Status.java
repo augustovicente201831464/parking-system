@@ -6,5 +6,5 @@ package com.cunoc.edu.gt.enums;
  * @Author: Augusto Vicente
  */
 public enum Status {
-    NEW, UPDATED, DELETED, UNCHANGED, UNKNOWN
+    ACTIVE, INACTIVE, UPDATED, DELETED, UNKNOWN
 }

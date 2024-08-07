@@ -1,0 +1,35 @@
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 15px;
+}
+
+.form-group .form-label {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--fg-form-label-color);
+}
+
+.form-group .form-control {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    border: var(--fg-form-control-border);
+    padding: 10px;
+    font-size: 15px;
+    color: var(--fg-form-control-color);
+}
+
+.form-group .btn {
+    width: 100px;
+    border-radius: 20px;
+    background-color: var(--fg-btn-bg-color);
+    color: var(--fg-btn-color);
+    font-size: 15px;
+    font-weight: 800;
+    margin-top: 10px;
+    padding: 10px;
+    text-shadow: var(--fg-btn-text-shadow);
+}

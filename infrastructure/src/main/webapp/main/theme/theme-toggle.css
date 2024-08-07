@@ -1,0 +1,18 @@
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  margin-top: 40px;
+}
+
+.btn-mode {
+    width: 140px;
+    border-radius: 20px;
+    background-color: var(--fg-btn-bg-color);
+    color: var(--fg-btn-color);
+    font-size: 15px;
+    font-weight: 800;
+    padding: 10px;
+    text-shadow: var(--fg-btn-text-shadow);
+    border: none;
+}

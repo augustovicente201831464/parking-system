@@ -3,7 +3,6 @@ package com.cunoc.edu.gt.input.controller;
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
 import com.cunoc.edu.gt.data.response.UserResponse;
-import com.cunoc.edu.gt.output.persistence.connection.CustomizedConnection;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -41,31 +39,15 @@ public class IndexController extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.setMaxInactiveInterval(3600);
-        session.setAttribute(AttributeNameConstant.CONNECTION, getConnection(session));
 
         Logger.getLogger("IndexServlet").info("IndexServlet initialized successfully.");
 
-        UserResponse userResponse = (UserResponse) session.getAttribute(AttributeNameConstant.USER);
+        UserResponse userResponse = (UserResponse) session.getAttribute(AttributeNameConstant.USER_RESPONSE);
 
         if (userResponse == null) {
             resp.sendRedirect(FilenameConstant.LOGIN_JSP);
         } else {
             resp.sendRedirect(FilenameConstant.HOME_JSP);
         }
-    }
-
-    /**
-     * Get the connection
-     *
-     * @param session the session
-     * @return the connection
-     */
-    @SneakyThrows
-    public Connection getConnection(HttpSession session) {
-        if(session.getAttribute(AttributeNameConstant.CONNECTION) == null) {
-            session.setAttribute(AttributeNameConstant.CONNECTION, CustomizedConnection.getInstance().getConnection());
-        }
-
-        return (Connection) session.getAttribute(AttributeNameConstant.CONNECTION);
     }
 }

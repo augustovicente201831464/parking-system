@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 /**
  * This class is used to close the connection, prepared statement and result set
  *
- * @author Augusto Vicente
+ * @Author: Augusto Vicente
  */
 public class ConnectionHelper {
 
