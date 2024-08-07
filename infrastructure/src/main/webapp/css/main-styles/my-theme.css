@@ -1,0 +1,56 @@
+:root {
+    /* Background styles */
+    --bg-color: rgb(254, 254, 254);
+
+    /* Title styles */
+
+    /* Modal styles */
+    --modal-bg-color: rgba(0, 0, 0, 0.1);
+    --modal-content-bg-color: rgb(254, 254, 254);
+    --modal-border: 1px solid #888;
+    --modal-btn-close-color: rgb(0, 0, 0);
+    --modal-btn-close-hover-color: rgb(124, 106, 1);
+
+    /* Card styles */
+    --card-content-bg-color: rgb(254, 254, 254);
+    --card-border: 1px solid rgb(0, 0, 0);
+    --card-title-color: rgb(0, 0, 0);
+    --card-text-color: rgb(0, 0, 0);
+    
+    /* Form group styles */
+    --fg-form-label-color: rgb(0, 0, 0);
+    --fg-form-control-border: 1px solid rgb(0, 0, 0);
+    --fg-form-control-color: rgb(0, 0, 0);
+    --fg-btn-bg-color: rgb(0, 133, 143);
+    --fg-btn-color: rgb(254, 254, 254);
+    --fg-btn-text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.4);
+    --fg-form-control-bg-color: rgb(254, 254, 254);
+}
+
+body.dark-mode {
+    /* Background styles */
+    --bg-color: rgb(60, 63, 65);
+
+    /* Modal styles */
+    --modal-bg-color: rgba(255, 255, 255, 0.1);
+    --modal-content-bg-color: rgb(60, 63, 65);
+    --modal-border: 1px solid rgb(254, 254, 254);
+    --modal-btn-close-color: rgb(254, 254, 254);
+    --modal-btn-close-hover-color: rgb(254, 254, 254);
+    --modal-btn-close-hover-color: rgb(206, 175, 0);
+
+    /* Card styles */
+    --card-content-bg-color: rgb(60, 63, 65);
+    --card-border: 1px solid rgb(254, 254, 254);
+    --card-title-color: rgb(254, 254, 254);
+    --card-text-color: rgb(254, 254, 254);
+
+    /* Form group styles */
+    --fg-form-label-color: rgb(254, 254, 254);
+    --fg-form-control-border: 1px solid rgb(254, 254, 254);
+    --fg-form-control-color: rgb(254, 254, 254);
+    --fg-btn-bg-color: rgb(0, 133, 143);
+    --fg-btn-color: rgb(254, 254, 254);
+    --fg-btn-text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.4);
+    --fg-form-control-bg-color: rgb(60, 63, 65);
+}

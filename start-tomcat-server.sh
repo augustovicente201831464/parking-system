@@ -5,10 +5,17 @@ PROJECT_HOME=/home/augusto/Documentos/Ingenieria\ Sistemas/IPC2/parking-system
 
 # Stop Tomcat server
 $TOMCAT_HOME/bin/shutdown.sh
-sleep 5
+sleep 2
 
 # Compile the Maven project
 mvn clean install
+
+# Check if the Maven build was successful
+# shellcheck disable=SC2181
+if [ $? -ne 0 ]; then
+  echo "Maven build failed, exiting..."
+  exit 1
+fi
 
 # Deploy the generated WAR file in the Tomcat webapps folder
 TOMCAT_WEBAPPS_DIR=$TOMCAT_HOME/webapps
@@ -33,3 +40,13 @@ EOL
 
 # Start Tomcat
 $TOMCAT_HOME/bin/startup.sh
+
+# Check if Tomcat started successfully
+sleep 2
+if curl --output /dev/null --silent --head --fail "http://192.168.1.80:8080/parking-system/"; then
+  # Open the default web browser to the specified URL
+  xdg-open "http://192.168.1.80:8080/parking-system/"
+else
+  echo "Failed to start Tomcat or the application did not deploy correctly."
+  exit 1
+fi

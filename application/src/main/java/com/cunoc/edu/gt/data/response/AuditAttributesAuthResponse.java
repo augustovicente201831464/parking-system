@@ -15,9 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AuditAttributesResponse {
-    private String createdBy;
-    private String updatedBy;
+public class AuditAttributesAuthResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Status status;
