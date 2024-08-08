@@ -7,15 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * Audit attributes response.
- *
- * @Author: Augusto Vicente
- */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AuditAttributesAuthResponse {
+public class AuditAttributeResponse {
+    private String createdBy;
+    private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Status status;

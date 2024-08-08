@@ -320,8 +320,8 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
 
             return Optional.of(ReflectionUtils.getObjectFromResultSet(resultSet, entity));
         } catch (Exception e) {
-            Logger.getLogger("JpaRepositoryImpl").warning("Error finding entity: " + e.getMessage());
-            throw new SqlExceptionCustomized("Error finding entity: " + e.getMessage());
+            Logger.getLogger("JpaRepositoryImpl").warning(e.getMessage());
+            return Optional.empty();
         } finally {
             ConnectionHelper.closeResultSet(resultSet);
             ConnectionHelper.closePreparedStatement(preparedStatement);

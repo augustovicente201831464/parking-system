@@ -30,6 +30,9 @@ public class UserRequest {
     @DataRequired(message = "Contraseña es requerida")
     private String password;
 
+    @DataRequired(message = "Confirmación de contraseña es requerida")
+    private String passwordConfirmation;
+
     @DataRequired(message = "Teléfono es requerido")
     private String phone;
 }

@@ -2,7 +2,7 @@ package com.cunoc.edu.gt.input.controller;
 
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
-import com.cunoc.edu.gt.data.response.UserResponse;
+import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,9 +42,10 @@ public class IndexController extends HttpServlet {
 
         Logger.getLogger("IndexServlet").info("IndexServlet initialized successfully.");
 
-        UserResponse userResponse = (UserResponse) session.getAttribute(AttributeNameConstant.USER_RESPONSE);
+        UserResponse loginResponse = (UserResponse) session.getAttribute(AttributeNameConstant.LOGIN_RESPONSE);
 
-        if (userResponse == null) {
+        if (loginResponse == null) {
+            req.getSession().setAttribute(AttributeNameConstant.IS_LOGIN_FORM, true);
             resp.sendRedirect(FilenameConstant.LOGIN_JSP);
         } else {
             resp.sendRedirect(FilenameConstant.HOME_JSP);

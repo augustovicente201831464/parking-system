@@ -100,6 +100,8 @@ public class ReflectionUtils {
                     field.set(object, resultSet.getDate(fieldName).toLocalDate());
                 } else if (field.getType().equals(LocalDateTime.class)) {
                     field.set(object, resultSet.getTimestamp(fieldName).toLocalDateTime());
+                } else if(field.getType().isEnum()) {
+                    field.set(object, Enum.valueOf((Class<Enum>) field.getType(), resultSet.getString(fieldName)));
                 }
             } catch (SQLException e) {
                 Logger.getLogger("ReflectionUtils").warning(String.format("Field %s not found in ResultSet", fieldName));

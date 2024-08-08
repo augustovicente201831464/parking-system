@@ -1,6 +1,8 @@
-package com.cunoc.edu.gt.data.response;
+package com.cunoc.edu.gt.data.response.auth;
 
 import lombok.*;
+
+import java.util.List;
 
 /**
  * User response.
@@ -19,4 +21,7 @@ public class UserResponse extends AuditAttributesAuthResponse {
     private String username;
     private String email;
     private String phone;
+
+    private List<RolResponse> roleResponses;
+    private List<AccessResponse> accessResponses;
 }

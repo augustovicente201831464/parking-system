@@ -42,11 +42,11 @@ EOL
 $TOMCAT_HOME/bin/startup.sh
 
 # Check if Tomcat started successfully
-sleep 2
-if curl --output /dev/null --silent --head --fail "http://192.168.1.80:8080/parking-system/"; then
-  # Open the default web browser to the specified URL
-  xdg-open "http://192.168.1.80:8080/parking-system/"
-else
-  echo "Failed to start Tomcat or the application did not deploy correctly."
-  exit 1
-fi
+#sleep 2
+#if curl --output /dev/null --silent --head --fail "http://192.168.1.80:8080/parking-system/"; then
+#  # Open the default web browser to the specified URL
+#  xdg-open "http://192.168.1.80:8080/parking-system/"
+#else
+#  echo "Failed to start Tomcat or the application did not deploy correctly."
+#  exit 1
+#fi
