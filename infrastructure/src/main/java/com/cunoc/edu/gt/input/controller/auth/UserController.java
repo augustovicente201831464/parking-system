@@ -57,17 +57,7 @@ public class UserController extends HttpServlet {
                 session.removeAttribute(AttributeNameConstant.LOGIN_RESPONSE);
                 session.removeAttribute(AttributeNameConstant.ERROR);
 
-                if (session.getAttribute(AttributeNameConstant.LOGIN_RESPONSE) != null) {
-                    Logger.getLogger("UserController").info("User is already logged in, redirecting to home.");
-                    res.sendRedirect(FilenameConstant.HOME_JSP);
-                    return;
-                }
-
                 UserLoginRequest loginRequest = UserControllerHandling.userLoginHandling(req, res);
-
-                Logger.getLogger("UserController").info("User login request: " + loginRequest);
-
-                session.removeAttribute(AttributeNameConstant.LOGIN_RESPONSE);
 
                 try{
                     session.setAttribute(AttributeNameConstant.LOGIN_RESPONSE, service.login(loginRequest));
@@ -84,14 +74,33 @@ public class UserController extends HttpServlet {
                     res.sendRedirect(FilenameConstant.LOGIN_JSP);
                 }
             }
-            case "logout" -> throw new UnsupportedOperationException("Not supported yet.");
+            case "logout" -> {
+                session.removeAttribute(AttributeNameConstant.LOGIN_RESPONSE);
+                session.removeAttribute(AttributeNameConstant.ERROR);
+                res.sendRedirect(FilenameConstant.LOGIN_JSP);
+                Logger.getLogger("UserController").info("User logged out successfully.");
+            }
             case "register" -> {
-                UserRequest userRequest = UserControllerHandling.userRegisterHandling(req, res);
 
                 session.removeAttribute(AttributeNameConstant.USER_RESPONSE);
-                session.setAttribute(AttributeNameConstant.USER_RESPONSE, service.register(userRequest));
+                session.removeAttribute(AttributeNameConstant.ERROR);
 
-                Logger.getLogger("UserController").info("User registered successfully.");
+                UserRequest userRequest = UserControllerHandling.userRegisterHandling(req, res);
+
+                try {
+                    session.setAttribute(AttributeNameConstant.USER_RESPONSE, service.register(userRequest));
+                    Logger.getLogger("UserController").info("User registered successfully.");
+                    res.sendRedirect(FilenameConstant.LOGIN_JSP);
+                }catch (Exception e){
+                    Throwable rootCause = e;
+                    while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                        rootCause = rootCause.getCause();
+                    }
+
+                    req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());
+                    Logger.getLogger("UserController").info("User registration failed: " + rootCause.getMessage());
+                    res.sendRedirect(FilenameConstant.REGISTER_JSP);
+                }
             }
             default -> throw new BadOperationException(String.format("In the %s method of %s the action is invalid.", "POST", "UserController"));
         }

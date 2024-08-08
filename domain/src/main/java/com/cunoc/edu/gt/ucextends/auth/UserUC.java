@@ -4,7 +4,7 @@ import com.cunoc.edu.gt.annotations.persistence.Transactional;
 import com.cunoc.edu.gt.annotations.validation.Valid;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
-import com.cunoc.edu.gt.data.response.UserResponse;
+import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.ports.input.UseCase;
 
 public interface UserUC extends UseCase<UserRequest, UserResponse, Integer> {

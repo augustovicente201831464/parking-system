@@ -35,6 +35,10 @@ public class UserHelper {
             throw new ValidationException("La contraseña es requerida");
         }
 
+        if (request.getPasswordConfirmation() == null || request.getPasswordConfirmation().isEmpty()) {
+            throw new ValidationException("La confirmación de la contraseña es requerida");
+        }
+
         if (request.getPhone() == null || request.getPhone().isEmpty()) {
             throw new ValidationException("El teléfono es requerido");
         }

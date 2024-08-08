@@ -1,7 +1,7 @@
-package com.cunoc.edu.gt.dmimpl;
+package com.cunoc.edu.gt.dmimpl.auth;
 
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
-import com.cunoc.edu.gt.data.response.UserResponse;
+import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.dm.DomainMapper;
 import com.cunoc.edu.gt.mapper.ModelMapperCustomized;
 import com.cunoc.edu.gt.model.auth.UserDTO;

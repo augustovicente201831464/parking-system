@@ -1,10 +1,8 @@
 package com.cunoc.edu.gt.utils;
 
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
-import com.cunoc.edu.gt.data.request.auth.UserRequest;
-import com.cunoc.edu.gt.data.response.UserResponse;
+import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.output.persistence.adapter.auth.UserPA;
-import com.cunoc.edu.gt.output.persistence.connection.ConnectionHelper;
 import com.cunoc.edu.gt.output.persistence.connection.CustomizedConnection;
 import com.cunoc.edu.gt.service.auth.UserService;
 import com.cunoc.edu.gt.ucextends.auth.UserUC;

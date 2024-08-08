@@ -1,0 +1,17 @@
+package com.cunoc.edu.gt.annotations.auth;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * PreAuthorize annotation
+ *
+ * @Author: Augusto Vicente
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface PreAuthorize {
+    String value();
+}

@@ -2,19 +2,21 @@ package com.cunoc.edu.gt.service.auth;
 
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
-import com.cunoc.edu.gt.data.response.UserResponse;
+import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.data.validator.UserHelper;
-import com.cunoc.edu.gt.dmimpl.UserDM;
+import com.cunoc.edu.gt.dmimpl.auth.UserDM;
 import com.cunoc.edu.gt.eventlistener.EventListenerAdapter;
 import com.cunoc.edu.gt.exception.BadOperationException;
 import com.cunoc.edu.gt.exception.InvalidDataException;
 import com.cunoc.edu.gt.exception.NotFoundException;
+import com.cunoc.edu.gt.model.auth.UserDTO;
 import com.cunoc.edu.gt.opextends.UserOP;
 import com.cunoc.edu.gt.ports.output.EventPublisher;
 import com.cunoc.edu.gt.ports.output.TransactionId;
 import com.cunoc.edu.gt.ports.output.event.DisplayEvent;
 import com.cunoc.edu.gt.ucextends.auth.UserUC;
 import lombok.SneakyThrows;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
 
@@ -45,24 +47,32 @@ public class UserService implements UserUC {
 
     @Override
     public UserResponse register(UserRequest request) {
-
         //Validate request
         UserHelper.validateUserRequest(request);
 
-        UserResponse response = save(request);
+        if(request.getPassword().compareTo(request.getPasswordConfirmation()) != 0){
+            throw new InvalidDataException("Passwords do not match");
+        }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        return save(request);
     }
 
     /**
      * Save entity
      *
-     * @param userRequest the entity to save
+     * @param request the entity to save
      * @return QueryResponse the saved entity
      */
     @Override
-    public UserResponse save(UserRequest userRequest) {
-        return null;
+    public UserResponse save(UserRequest request) {
+        UserDTO dto = domainMapper.requestToDto(request);
+        dto.setPassword(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt()));
+
+        dto = outputPort.save((UserDTO) auditAttributeAuthService.getAuditAttributeAuthForNew(dto));
+
+        eventPublisher.handle(new DisplayEvent<>("User saved", LocalDateTime.now(), "System" ,"UserService", "save", TransactionId.generateTransactionId(), dto.getId()));
+
+        return domainMapper.dtoToResponse(dto);
     }
 
     /**
@@ -109,7 +119,7 @@ public class UserService implements UserUC {
     public  UserResponse getByUsername(String username, String password){
         UserResponse response = outputPort.getByUsername(username, password)
                 .map(domainMapper::dtoToResponse)
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Username / Password is incorrect"));
 
         eventPublisher.handle(new DisplayEvent<>("User retrieved by username", LocalDateTime.now(), "System" ,"UserService", "getByUsername", TransactionId.generateTransactionId(), response.getId()));
 
@@ -132,6 +142,8 @@ public class UserService implements UserUC {
         this.outputPort = outputPort;
         this.domainMapper = UserDM.getInstance();
         this.eventPublisher = EventListenerAdapter.getInstance();
+
+        this.auditAttributeAuthService = AuditAttributeAuthService.getInstance();
     }
 
     public static UserService getInstance(UserOP outputPort) {
@@ -144,5 +156,7 @@ public class UserService implements UserUC {
     private static UserService instance;
     private final UserOP outputPort;
     private final UserDM domainMapper;
+
     private final EventPublisher eventPublisher;
+    private final AuditAttributeAuthService auditAttributeAuthService;
 }

@@ -30,8 +30,6 @@ public class UserPA implements UserOP {
     @Override
     @SneakyThrows
     public Optional<UserDTO> getByUsername(String username, String password) {
-        Logger.getLogger("UserPA").info("Getting user by username");
-
         return repository.findByUsername(username).map(
                 user -> {
                     if (!validPassword(user, password)) {
@@ -50,7 +48,11 @@ public class UserPA implements UserOP {
      */
     @Override
     public UserDTO save(UserDTO modelDto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return persistenceMapper.entityToDto(
+                repository.save(
+                        persistenceMapper.dtoToEntity(modelDto)
+                )
+        );
     }
 
     /**
@@ -100,7 +102,7 @@ public class UserPA implements UserOP {
     /**
      * Method to validate hashed password
      *
-     * @param entity the user entity
+     * @param entity   the user entity
      * @param password the password to validate
      * @return boolean
      */
