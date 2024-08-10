@@ -9,5 +9,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface ManyToOne {
+public @interface ManyToMany {
+    Class targetEntity() default void.class;
+    CascadeType[] cascade() default {};
+    FetchType fetch() default FetchType.LAZY;
+    String mappedBy() default "";
 }

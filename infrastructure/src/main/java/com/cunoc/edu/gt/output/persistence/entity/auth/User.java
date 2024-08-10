@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Entity User
  *
@@ -40,4 +42,16 @@ public class User extends AuditAttributeAuth {
 
     @Column(name = "telefono")
     private String phone;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_rol",
+            joinColumns = @JoinColumn(name = "usuario_codigo", referencedColumnName = "codigo"),
+            inverseJoinColumns = @JoinColumn(name = "rol_codigo", referencedColumnName = "codigo"))
+    private List<Rol> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_access",
+            joinColumns = @JoinColumn(name = "usuario_codigo", referencedColumnName = "codigo"),
+            inverseJoinColumns = @JoinColumn(name = "acceso_codigo", referencedColumnName = "codigo"))
+    private List<Access> accesses;
 }

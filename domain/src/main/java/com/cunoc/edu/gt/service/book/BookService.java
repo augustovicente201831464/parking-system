@@ -1,5 +1,7 @@
 package com.cunoc.edu.gt.service.book;
 
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 import com.cunoc.edu.gt.data.request.books.BookRequest;
 import com.cunoc.edu.gt.data.response.books.BookResponse;
 import com.cunoc.edu.gt.dmimpl.book.BookDM;
@@ -79,6 +81,17 @@ public class BookService implements BookUC {
     @Override
     public BookResponse getById(Integer ID) {
         return null;
+    }
+
+    /**
+     * Get all objects
+     *
+     * @param pageable the pagination information
+     * @return Page<Response> the page of objects
+     */
+    @Override
+    public Page<BookResponse> getPage(Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**

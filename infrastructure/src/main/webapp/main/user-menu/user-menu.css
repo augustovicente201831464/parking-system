@@ -1,0 +1,41 @@
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    grid-gap: 10px;
+    padding: 30px;
+    border-radius: 25px 25px 0 0;
+    width: 306px
+}
+
+.user-menu .grid-item {
+    padding:25px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 15px;
+    height: 90px;
+    width: 75px;
+    border: var(--user-menu-border);
+    background: var(--user-menu-bg-color);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-menu .grid-item:hover {
+    border: var(--user-menu-border);
+    background: var(--user-menu-gb-color-hover);
+}
+
+.user-menu .a-index {
+    font-weight: bold;
+    text-align: center;
+    color: var(--user-menu-color);
+    margin-top: 20px;
+}
+
+.user-menu .fa {
+    font-size: 30px;
+    color: var(--user-menu-color);
+}

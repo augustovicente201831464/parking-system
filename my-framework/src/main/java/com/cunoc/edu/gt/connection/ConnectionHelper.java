@@ -1,4 +1,4 @@
-package com.cunoc.edu.gt.output.persistence.connection;
+package com.cunoc.edu.gt.connection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

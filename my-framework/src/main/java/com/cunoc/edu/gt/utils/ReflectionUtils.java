@@ -1,4 +1,4 @@
-package com.cunoc.edu.gt.output.persistence.repository;
+package com.cunoc.edu.gt.utils;
 
 import com.cunoc.edu.gt.annotations.persistence.*;
 import com.cunoc.edu.gt.exception.NotFoundException;
@@ -6,6 +6,9 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -15,6 +18,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * ReflectionUtils class
+ *
+ * @Author: Augusto Vicente
+ */
 public class ReflectionUtils {
 
     public static List<Field> getAllFields(Class<?> clazz) {
@@ -42,9 +50,9 @@ public class ReflectionUtils {
      * Get list of objects from ResultSet
      *
      * @param resultSet the ResultSet
-     * @param clazz    the class
+     * @param clazz     the class
+     * @param <T>       the type of the object
      * @return the list of objects
-     * @param <T> the type of the object
      */
     @SneakyThrows
     public static <T> List<T> getListObjectFromResultSet(ResultSet resultSet, Class<T> clazz) {
@@ -61,9 +69,9 @@ public class ReflectionUtils {
      * Get object from ResultSet
      *
      * @param resultSet the ResultSet
-     * @param clazz    the class
+     * @param clazz     the class
+     * @param <T>       the type of the object
      * @return the object
-     * @param <T> the type of the object
      */
     @SneakyThrows
     public static <T> T getObjectFromResultSet(ResultSet resultSet, Class<T> clazz) {
@@ -74,14 +82,7 @@ public class ReflectionUtils {
             field.setAccessible(true);
 
             //Field annotation Column
-            String fieldName = "";
-
-            if (field.isAnnotationPresent(Column.class)) {
-                Column column = field.getAnnotation(Column.class);
-                fieldName = column.name();
-            } else {
-                fieldName = toSnakeCase(field.getName());
-            }
+            String fieldName = columnName(field);
 
             try {
                 if (field.getType().equals(Integer.class) || field.getType().equals(int.class)) {
@@ -100,7 +101,7 @@ public class ReflectionUtils {
                     field.set(object, resultSet.getDate(fieldName).toLocalDate());
                 } else if (field.getType().equals(LocalDateTime.class)) {
                     field.set(object, resultSet.getTimestamp(fieldName).toLocalDateTime());
-                } else if(field.getType().isEnum()) {
+                } else if (field.getType().isEnum()) {
                     field.set(object, Enum.valueOf((Class<Enum>) field.getType(), resultSet.getString(fieldName)));
                 }
             } catch (SQLException e) {
@@ -192,6 +193,10 @@ public class ReflectionUtils {
     public static <ENTITY> Field getIdField(ENTITY entity) {
         List<Field> fields = ReflectionUtils.getAllFields(entity.getClass());
 
+        return getIdField(fields);
+    }
+
+    public static Field getIdField(List<Field> fields) {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Id.class)) {
                 return field;
@@ -199,5 +204,98 @@ public class ReflectionUtils {
         }
 
         throw new NotFoundException("No id field found");
+    }
+
+    public static <ENTITY> List<ENTITY> getEntitiesFromResultSet(ResultSet resultSet, Class<ENTITY> entity) {
+        List<ENTITY> entities = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                entities.add(ReflectionUtils.getObjectFromResultSet(resultSet, entity));
+            }
+
+            return entities;
+        } catch (SQLException e) {
+            throw new NotFoundException("Error getting entities from ResultSet");
+        }
+    }
+
+    public static Class<?> getRelatedEntityClassFromList(Field fieldRelation) {
+        Type genericType = fieldRelation.getGenericType();
+        if (genericType instanceof ParameterizedType parameterizedType) {
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if (actualTypeArguments.length > 0) {
+                // Devuelve el tipo de la clase sin 'class' como prefijo
+                return (Class<?>) actualTypeArguments[0];
+            }
+        }
+        return null;
+    }
+
+    public static String entityName(Class<?> entity) {
+        String entityName = entity.getSimpleName();
+
+        if (entity.isAnnotationPresent(Entity.class)) {
+            Entity entityAnnotation = entity.getAnnotation(Entity.class);
+            entityName = entityAnnotation.name();
+        }
+
+        return entityName;
+    }
+
+    public static String columnName(Field field) {
+        String columnName = toSnakeCase(field.getName());
+
+        if (field.isAnnotationPresent(Column.class)) {
+            Column columnAnnotation = field.getAnnotation(Column.class);
+            columnName = columnAnnotation.name();
+        }
+
+        return columnName;
+    }
+
+    public static String idColumnName(Field idField) {
+        String idColumnName = columnName(idField);
+
+        if (idColumnName.isEmpty() || idColumnName.isBlank()) {
+            idColumnName = toSnakeCase(idField.getName());
+        }
+
+        return idColumnName;
+    }
+
+    public static String idColumnName(Class<?> entity) {
+        Field idField = getIdField(entity);
+        return idColumnName(idField);
+    }
+
+    public static Method findMethod(Class<?> repository, String methodName, List<Object> values) throws
+            NoSuchMethodException {
+        Class<?>[] paramTypes = values.stream().map(Object::getClass).toArray(Class[]::new);
+        return repository.getMethod(methodName, paramTypes);
+    }
+
+    public static boolean notExistsRelation(Field field) {
+        return !field.isAnnotationPresent(ManyToMany.class) &&
+                !field.isAnnotationPresent(ManyToOne.class) &&
+                !field.isAnnotationPresent(OneToMany.class) &&
+                !field.isAnnotationPresent(OneToOne.class);
+    }
+
+    public static FetchType getFetchType(Field field) {
+
+        Logger.getLogger("ReflectionUtils").info("Field: " + field.getName());
+
+        if (field.isAnnotationPresent(ManyToMany.class)) {
+            return field.getAnnotation(ManyToMany.class).fetch();
+        } else if (field.isAnnotationPresent(ManyToOne.class)) {
+            return field.getAnnotation(ManyToOne.class).fetch();
+        } else if (field.isAnnotationPresent(OneToMany.class)) {
+            return field.getAnnotation(OneToMany.class).fetch();
+        } else if (field.isAnnotationPresent(OneToOne.class)) {
+            return field.getAnnotation(OneToOne.class).fetch();
+        } else {
+            return null;
+        }
     }
 }

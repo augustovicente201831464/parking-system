@@ -1,6 +1,8 @@
 package com.cunoc.edu.gt.dmimpl.auth;
 
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
+import com.cunoc.edu.gt.data.response.auth.AccessResponse;
+import com.cunoc.edu.gt.data.response.auth.RolResponse;
 import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.dm.DomainMapper;
 import com.cunoc.edu.gt.mapper.ModelMapperCustomized;
@@ -33,6 +35,24 @@ public class UserDM implements DomainMapper<UserDTO, UserRequest, UserResponse> 
     @Override
     public UserResponse dtoToResponse(UserDTO dto) {
         return modelMapper.map(dto, UserResponse.class);
+    }
+
+    public UserResponse dtoToResponseWithRelations(UserDTO dto) {
+        UserResponse response = modelMapper.map(dto, UserResponse.class);
+
+        if (dto.getRolDTOs() != null && !dto.getRolDTOs().isEmpty()) {
+            dto.getRolDTOs().forEach(rol ->
+                    response.getRolResponses().add(modelMapper.map(rol, RolResponse.class))
+            );
+        }
+
+        if (dto.getAccessDTOs() != null && !dto.getAccessDTOs().isEmpty()) {
+            dto.getAccessDTOs().forEach(access ->
+                    response.getAccessResponses().add(modelMapper.map(access, AccessResponse.class))
+            );
+        }
+
+        return response;
     }
 
     private UserDM() {

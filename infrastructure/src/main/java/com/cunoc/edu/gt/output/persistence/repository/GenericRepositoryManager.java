@@ -2,7 +2,7 @@ package com.cunoc.edu.gt.output.persistence.repository;
 
 import com.cunoc.edu.gt.output.persistence.repository.extend.RolRepository;
 import com.cunoc.edu.gt.output.persistence.repository.extend.UserRepository;
-import com.cunoc.edu.gt.output.persistence.repository.implement.JpaRepositoryImpl;
+import com.cunoc.edu.gt.jpa.repository.repimpl.JpaRepositoryImpl;
 import com.cunoc.edu.gt.output.persistence.repository.implement.UserRepositoryImpl;
 
 import java.sql.Connection;

@@ -26,4 +26,13 @@ public class AttributeNameConstant {
 
     // Rol name
     public static final String USUARIO = "USUARIO";
+
+    // Pagination
+    public static final String PAGE = "page";
+    public static final String SIZE = "size";
+    public static final String SORT = "sort";
+    public static final String DIRECTION = "direction";
+
+    // Pages
+    public static final String PAGE_USER = "page_user";
 }

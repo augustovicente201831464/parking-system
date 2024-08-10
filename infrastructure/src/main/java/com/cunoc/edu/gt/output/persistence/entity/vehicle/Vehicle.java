@@ -1,4 +1,4 @@
-package com.cunoc.edu.gt.output.persistence.entity.book;
+package com.cunoc.edu.gt.output.persistence.entity.vehicle;
 
 import com.cunoc.edu.gt.annotations.persistence.Column;
 import com.cunoc.edu.gt.annotations.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Book extends AuditAttribute {
+public class Vehicle extends AuditAttribute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

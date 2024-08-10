@@ -1,5 +1,9 @@
 package com.cunoc.edu.gt.ports.output;
 
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,4 +54,19 @@ public interface OutputPort<DTO, ID> {
      * @return true if the modelDto exists, false otherwise
      */
     boolean existsById(ID id);
+
+    /**
+     * Method to get all modelDto
+     *
+     * @return List of modelDto
+     */
+    List<DTO> getAll();
+
+    /**
+     * Method to get all modelDto with pagination
+     *
+     * @param pageable the pagination information
+     * @return Page of modelDto
+     */
+    Page<DTO> getPage(Pageable pageable);
 }

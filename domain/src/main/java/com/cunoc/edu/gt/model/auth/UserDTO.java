@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * DTO class for User
  *
@@ -22,4 +25,7 @@ public class UserDTO extends AuditAttributeAuthDTO{
     private String email;
     private String password;
     private String phone;
+
+    private List<RolDTO> rolDTOs = new ArrayList<>();
+    private List<AccessDTO> accessDTOs = new ArrayList<>();
 }

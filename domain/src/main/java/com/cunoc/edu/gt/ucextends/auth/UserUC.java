@@ -1,5 +1,6 @@
 package com.cunoc.edu.gt.ucextends.auth;
 
+import com.cunoc.edu.gt.annotations.auth.PreAuthorize;
 import com.cunoc.edu.gt.annotations.persistence.Transactional;
 import com.cunoc.edu.gt.annotations.validation.Valid;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
@@ -15,7 +16,9 @@ public interface UserUC extends UseCase<UserRequest, UserResponse, Integer> {
      * @param request the user to register
      * @return UserResponse the user registered
      */
+    @Valid
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     UserResponse register(UserRequest request);
 
     /**
@@ -25,7 +28,6 @@ public interface UserUC extends UseCase<UserRequest, UserResponse, Integer> {
      * @return UserResponse the user logged
      */
     @Valid
-    @Transactional
     UserResponse login(UserLoginRequest loginRequest);
 
     /**

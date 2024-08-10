@@ -1,7 +1,7 @@
 package com.cunoc.edu.gt.output.persistence.repository.extend;
 
 import com.cunoc.edu.gt.annotations.persistence.Param;
-import com.cunoc.edu.gt.annotations.repository.JpaRepository;
+import com.cunoc.edu.gt.jpa.repository.JpaRepository;
 import com.cunoc.edu.gt.annotations.repository.Query;
 import com.cunoc.edu.gt.output.persistence.entity.auth.User;
 
@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      * @param username username of the user
      * @return an optional of user
      */
-    @Query("SELECT * FROM users WHERE username = ?;")
+    //@Query("SELECT * FROM users WHERE username = ?;")
     Optional<User> findByUsername(@Param("username") String username);
 
     /**

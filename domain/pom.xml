@@ -24,5 +24,11 @@
             <artifactId>application</artifactId>
             <version>0.0.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.cunoc.edu.gt</groupId>
+            <artifactId>my-framework</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,7 +1,10 @@
 package com.cunoc.edu.gt.input.controller.auth;
 
+import com.cunoc.edu.gt.config.AuthorizationHandler;
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
+import com.cunoc.edu.gt.data.pagination.util.PageRequest;
+import com.cunoc.edu.gt.data.pagination.util.Sort;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
 import com.cunoc.edu.gt.exception.BadOperationException;
@@ -20,6 +23,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
@@ -51,6 +56,14 @@ public class UserController extends HttpServlet {
             throw new BadOperationException(String.format("In the %s method of %s the action is required.", "POST", "UserController"));
         }
 
+        Logger.getLogger("UserController").info("Action: " + action);
+
+        // Set the request in the AuthorizationHandler proxy
+        InvocationHandler handler = Proxy.getInvocationHandler(service);
+        if (handler instanceof AuthorizationHandler) {
+            ((AuthorizationHandler) handler).setRequest(req);
+        }
+
         switch (action) {
             case "login" -> {
 
@@ -59,11 +72,11 @@ public class UserController extends HttpServlet {
 
                 UserLoginRequest loginRequest = UserControllerHandling.userLoginHandling(req, res);
 
-                try{
+                try {
                     session.setAttribute(AttributeNameConstant.LOGIN_RESPONSE, service.login(loginRequest));
                     res.sendRedirect(FilenameConstant.HOME_JSP);
                     Logger.getLogger("UserController").info("User logged in successfully.");
-                }catch (Exception e){
+                } catch (Exception e) {
                     Throwable rootCause = e;
                     while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
                         rootCause = rootCause.getCause();
@@ -91,7 +104,7 @@ public class UserController extends HttpServlet {
                     session.setAttribute(AttributeNameConstant.USER_RESPONSE, service.register(userRequest));
                     Logger.getLogger("UserController").info("User registered successfully.");
                     res.sendRedirect(FilenameConstant.LOGIN_JSP);
-                }catch (Exception e){
+                } catch (Exception e) {
                     Throwable rootCause = e;
                     while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
                         rootCause = rootCause.getCause();
@@ -102,7 +115,31 @@ public class UserController extends HttpServlet {
                     res.sendRedirect(FilenameConstant.REGISTER_JSP);
                 }
             }
-            default -> throw new BadOperationException(String.format("In the %s method of %s the action is invalid.", "POST", "UserController"));
+            case "get-page" -> {
+                try {
+
+                    int page = Integer.parseInt(req.getParameter(AttributeNameConstant.PAGE) == null ? "1" : req.getParameter(AttributeNameConstant.PAGE));
+                    int size = Integer.parseInt(req.getParameter(AttributeNameConstant.SIZE) == null ? "10" : req.getParameter(AttributeNameConstant.SIZE));
+                    String orders = req.getParameter(AttributeNameConstant.SORT) == null ? "id" : req.getParameter(AttributeNameConstant.SORT);
+                    boolean asc = Boolean.parseBoolean(req.getParameter(AttributeNameConstant.DIRECTION) == null ? "true" : req.getParameter(AttributeNameConstant.DIRECTION));
+
+                    req.getSession().setAttribute(AttributeNameConstant.PAGE_USER, service.getPage(PageRequest.of(page, size, Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, orders))));
+                    Logger.getLogger("UserController").info("User page retrieved successfully.");
+                    res.sendRedirect(FilenameConstant.HOME_JSP); // For test purposes
+                } catch (Exception e) {
+                    Throwable rootCause = e;
+                    while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                        rootCause = rootCause.getCause();
+                    }
+
+                    req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());
+                    Logger.getLogger("UserController").info("User page retrieval failed: " + rootCause.getMessage());
+                    res.sendRedirect(FilenameConstant.HOME_JSP);
+                }
+
+            }
+            default ->
+                    throw new BadOperationException(String.format("In the %s method of %s the action is invalid.", "POST", "UserController"));
         }
     }
 
@@ -116,6 +153,12 @@ public class UserController extends HttpServlet {
 
         if (action == null) {
             throw new BadOperationException("Action is required");
+        }
+
+        // Set the request in the AuthorizationHandler proxy
+        InvocationHandler handler = Proxy.getInvocationHandler(service);
+        if (handler instanceof AuthorizationHandler) {
+            ((AuthorizationHandler) handler).setRequest(req);
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
@@ -142,7 +185,8 @@ public class UserController extends HttpServlet {
         // Interceptors for the user service
         UserUC userUC = UserService.getInstance(outputPort);
         UserUC validationProxy = ValidatorInterceptor.createProxy(userUC, UserUC.class);
-        this.service = TransactionalInterceptor.createProxy(validationProxy, connection, UserUC.class);
+        UserUC transactionalProxy = TransactionalInterceptor.createProxy(validationProxy, connection, UserUC.class);
+        this.service = AuthorizationHandler.createProxy(transactionalProxy, null, UserUC.class);
     }
 
     private final UserUC service;
