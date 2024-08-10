@@ -16,8 +16,7 @@ public interface UserOP extends OutputPort<UserDTO, Integer> {
      * Get User by Username
      *
      * @param username the username to search
-     * @param password the password to match
      * @return UserDTO the user found
      */
-    Optional<UserDTO> getByUsername(String username, String password);
+    Optional<UserDTO> getByUsername(String username);
 }

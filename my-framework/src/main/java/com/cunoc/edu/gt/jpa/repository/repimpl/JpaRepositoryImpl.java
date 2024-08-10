@@ -114,10 +114,10 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
 
         try {
             List<Field> fields = ReflectionUtils.getAllFields(entity);
-            Field idField = ReflectionUtils.getIdField(fields);
+            Field entityIdField = ReflectionUtils.getIdField(fields);
 
             String entityName = ReflectionUtils.entityName(entity);
-            String idColumnName = ReflectionUtils.idColumnName(idField);
+            String idColumnName = ReflectionUtils.idColumnName(entityIdField);
 
             String query = String.format("SELECT * FROM %s WHERE %s = ?;", entityName, idColumnName);
 
@@ -125,7 +125,7 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setObject(1, id);
 
-            Logger.getLogger("JpaRepositoryImpl").info("Query with values: " + preparedStatement.toString());
+            Logger.getLogger("JpaRepositoryImpl").info("Query with values: " + preparedStatement);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -135,14 +135,14 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
 
             ENTITY entitySearched = ReflectionUtils.getObjectFromResultSet(resultSet, entity);
 
-            fields.forEach(field -> {
+            fields.forEach(fieldRelation -> {
                 try {
-                    if (ReflectionUtils.notExistsRelation(field)) {
+                    if (ReflectionUtils.notExistsRelation(fieldRelation)) {
                         return;
                     }
 
-                    if (ReflectionUtils.getFetchType(field) == FetchType.EAGER) {
-                        processFetchEager(field, entitySearched, idField);
+                    if (ReflectionUtils.getFetchType(fieldRelation) == FetchType.EAGER) {
+                        processFetchEager(fieldRelation, entitySearched, entityIdField);
                     }
                 } catch (Exception e) {
                     Logger.getLogger("JpaRepositoryImpl").warning("Error processing relation: " + e.getMessage());
@@ -399,19 +399,27 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
         }
     }
 
-    private void processFetchEager(Field fieldRelation, ENTITY entity, Field idField) throws Exception {
+    private void processFetchEager(Field fieldRelation, ENTITY parent, Field idParent) throws Exception {
         Logger.getLogger("JpaRepositoryImpl").info("Processing eager fetch");
-        processFetch(fieldRelation, entity, idField);
+        processFetch(fieldRelation, parent, idParent);
     }
 
-    private void processFetchLazy(Field fieldRelation, ENTITY entity, Field idField) throws Exception {
-        Logger.getLogger("JpaRepositoryImpl").info("Processing lazy fetch");
-
-        if(ReflectionUtils.getFetchType(fieldRelation) == FetchType.LAZY) {
+    /**
+     * Method to process lazy fetch
+     *
+     * @param fieldRelation the field relation
+     * @param parent the entity
+     * @param idParent the id field
+     */
+    @Override
+    @SneakyThrows
+    public void processFetchLazy(Field fieldRelation, ENTITY parent, Field idParent) {
+        if(ReflectionUtils.getFetchType(fieldRelation) != FetchType.LAZY) {
+            Logger.getLogger("JpaRepositoryImpl").info("Field is lazy");
             return;
         }
 
-        processFetch(fieldRelation, entity, idField);
+        processFetch(fieldRelation, parent, idParent);
     }
 
     private void processFetch(Field fieldRelation, ENTITY entity, Field idField) throws Exception {
@@ -426,8 +434,7 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
         }
     }
 
-    private void processManyToMany(Field fieldRelation, ENTITY entity, Field idField) throws Exception {
-        Logger.getLogger("JpaRepositoryImpl").info("Processing many to many relation");
+    private void processManyToMany(Field fieldRelation, ENTITY parent, Field idField) throws Exception {
         FetchType fetchType = fieldRelation.getAnnotation(ManyToMany.class).fetch();
 
         fieldRelation.setAccessible(true);
@@ -435,7 +442,7 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
         ManyToMany manyToMany = fieldRelation.getAnnotation(ManyToMany.class);
         JoinTable joinTable = fieldRelation.getAnnotation(JoinTable.class);
 
-        Class<?> relatedEntity = ReflectionUtils.getRelatedEntityClassFromList(fieldRelation);
+        Class<?> relatedEntity = ReflectionUtils.getEntityClassFromFieldAsList(fieldRelation);
 
         assert relatedEntity != null;
 
@@ -453,25 +460,25 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             idField.setAccessible(true);
-            preparedStatement.setObject(1, idField.get(entity));
+            preparedStatement.setObject(1, idField.get(parent));
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<?> relatedEntities = ReflectionUtils.getEntitiesFromResultSet(resultSet, relatedEntity);
 
-                fieldRelation.set(entity, relatedEntities);
+                fieldRelation.set(parent, relatedEntities);
             }
         }
     }
 
-    private void processOneToMany(Field fieldRelation, ENTITY entity, Field idField) throws Exception{
+    private void processOneToMany(Field fieldRelation, ENTITY parent, Field idField) throws Exception{
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    private void processManyToOne(Field fieldRelation, ENTITY entity, Field idField) throws Exception{
+    private void processManyToOne(Field fieldRelation, ENTITY parent, Field idField) throws Exception{
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    private void processOneToOne(Field fieldRelation, ENTITY entity, Field idField) throws Exception{
+    private void processOneToOne(Field fieldRelation, ENTITY parent, Field idField) throws Exception{
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }

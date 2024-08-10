@@ -1,4 +1,4 @@
-package com.cunoc.edu.gt.utils;
+package com.cunoc.edu.gt.proxies.manager;
 
 import com.cunoc.edu.gt.annotations.validation.DataRequired;
 import com.cunoc.edu.gt.exception.ValidationException;
@@ -23,7 +23,6 @@ public class ValidatorManager {
                 Object value = field.get(obj);
                 if (value == null || value.toString().trim().isEmpty()) {
                     DataRequired annotation = field.getAnnotation(DataRequired.class);
-                    Logger.getLogger("ValidatorManager").info("Validation failed: " + annotation.message());
                     throw new ValidationException(annotation.message());
                 }
             }

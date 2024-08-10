@@ -5,7 +5,7 @@ import com.cunoc.edu.gt.data.response.auth.AccessResponse;
 import com.cunoc.edu.gt.data.response.auth.RolResponse;
 import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.dm.DomainMapper;
-import com.cunoc.edu.gt.mapper.ModelMapperCustomized;
+import com.cunoc.edu.gt.mapper.ModelMapper;
 import com.cunoc.edu.gt.model.auth.UserDTO;
 
 /**
@@ -56,7 +56,7 @@ public class UserDM implements DomainMapper<UserDTO, UserRequest, UserResponse> 
     }
 
     private UserDM() {
-        this.modelMapper = ModelMapperCustomized.getInstance();
+        this.modelMapper = ModelMapper.getInstance();
     }
 
     public static UserDM getInstance() {
@@ -68,5 +68,5 @@ public class UserDM implements DomainMapper<UserDTO, UserRequest, UserResponse> 
     }
 
     private static UserDM instance;
-    private final ModelMapperCustomized modelMapper;
+    private final ModelMapper modelMapper;
 }

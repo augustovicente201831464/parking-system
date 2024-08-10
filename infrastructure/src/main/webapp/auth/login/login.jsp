@@ -14,13 +14,13 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="../login/login.css"/>
+    <jsp:include page="/toastr/toastr.jsp"/>
 </head>
 
 <body class="background">
 <%
     request.getSession().setAttribute(AttributeNameConstant.SHOW_LOGIN_BTN, false);
     request.getSession().setAttribute(AttributeNameConstant.SHOW_REGISTER_BTN, true);
-    //request.getSession().removeAttribute(AttributeNameConstant.ERROR);
 %>
 <jsp:include page="../../main/main-menu/main-menu.jsp"/>
 
@@ -43,14 +43,6 @@
                                 <input type="password" class="form-control" id="<%=AttributeNameConstant.PASSWORD%>"
                                        name="<%=AttributeNameConstant.PASSWORD%>">
                             </div>
-
-                            <% String errorMessage = (String) request.getSession().getAttribute(AttributeNameConstant.ERROR);
-                                if (errorMessage != null) { %>
-                            <div class="error">
-                                <p><%= errorMessage %>
-                                </p>
-                            </div>
-                            <% } %>
 
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="btn btn-primary">Iniciar sesión</button>

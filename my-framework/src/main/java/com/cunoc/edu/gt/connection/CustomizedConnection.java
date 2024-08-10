@@ -1,4 +1,4 @@
-package com.cunoc.edu.gt.output.persistence.connection;
+package com.cunoc.edu.gt.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +9,7 @@ import java.util.Properties;
 
 /**
  * Custom class to handle the connection to the database
+ *
  *
  * @Author: Augusto Vicente
  */

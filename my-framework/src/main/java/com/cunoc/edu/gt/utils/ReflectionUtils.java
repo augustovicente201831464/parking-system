@@ -35,12 +35,12 @@ public class ReflectionUtils {
         return fields;
     }
 
-    public static Field getField(Class<?> clazz, String fieldName) {
+    public static <ENTITY> Field getField(ENTITY clazz, String fieldName) {
         while (clazz != null) {
             try {
-                return clazz.getDeclaredField(fieldName);
+                return clazz.getClass().getDeclaredField(fieldName);
             } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
+                clazz = (ENTITY) clazz.getClass().getSuperclass();
             }
         }
         return null;
@@ -220,16 +220,30 @@ public class ReflectionUtils {
         }
     }
 
-    public static Class<?> getRelatedEntityClassFromList(Field fieldRelation) {
+    public static Class<?> getEntityClassFromFieldAsList(Field fieldRelation) {
         Type genericType = fieldRelation.getGenericType();
         if (genericType instanceof ParameterizedType parameterizedType) {
             Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             if (actualTypeArguments.length > 0) {
-                // Devuelve el tipo de la clase sin 'class' como prefijo
                 return (Class<?>) actualTypeArguments[0];
             }
         }
+
         return null;
+    }
+
+    public static Class<?> getEntityClassFromField(Field fieldRelation) {
+        return fieldRelation.getType();
+    }
+
+    /**
+     * Get class from object
+     *
+     * @param object the object
+     * @return the class
+     */
+    public static Class<?> getClassFromObject(Object object) {
+        return object.getClass();
     }
 
     public static String entityName(Class<?> entity) {
@@ -283,9 +297,6 @@ public class ReflectionUtils {
     }
 
     public static FetchType getFetchType(Field field) {
-
-        Logger.getLogger("ReflectionUtils").info("Field: " + field.getName());
-
         if (field.isAnnotationPresent(ManyToMany.class)) {
             return field.getAnnotation(ManyToMany.class).fetch();
         } else if (field.isAnnotationPresent(ManyToOne.class)) {

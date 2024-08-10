@@ -26,20 +26,13 @@ public class UserPA implements UserOP {
      * Get User by Username
      *
      * @param username the username to search
-     * @param password the password to match
      * @return UserDTO the user found
      */
     @Override
     @SneakyThrows
-    public Optional<UserDTO> getByUsername(String username, String password) {
-        return repository.findByUsername(username).map(
-                user -> {
-                    if (!validPassword(user, password)) {
-                        return null;
-                    }
-                    return persistenceMapper.entityToDtoWithRelations(user);
-                }
-        );
+    public Optional<UserDTO> getByUsername(String username) {
+        return repository.findByUsername(username)
+                .map(persistenceMapper::entityToDtoWithRelations);
     }
 
     /**
@@ -139,7 +132,7 @@ public class UserPA implements UserOP {
 
     private UserPA(Connection connection) {
         repository = UserRepositoryImpl.getInstance(connection);
-        persistenceMapper = UserPM.getInstance();
+        persistenceMapper = UserPM.getInstance(repository);
     }
 
     public static UserPA getInstance(Connection connection) {

@@ -1,6 +1,7 @@
 package com.cunoc.edu.gt.input.controller.book;
 
 import com.cunoc.edu.gt.config.AuthorizationHandler;
+import com.cunoc.edu.gt.connection.CustomizedConnection;
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
 import com.cunoc.edu.gt.data.pagination.Page;
@@ -13,12 +14,11 @@ import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.data.response.books.BookResponse;
 import com.cunoc.edu.gt.enums.AccessName;
 import com.cunoc.edu.gt.enums.RolName;
-import com.cunoc.edu.gt.output.persistence.connection.CustomizedConnection;
 import com.cunoc.edu.gt.service.AuditAttributeService;
 import com.cunoc.edu.gt.service.book.BookService;
 import com.cunoc.edu.gt.ucextends.books.BookUC;
-import com.cunoc.edu.gt.utils.TransactionalInterceptor;
-import com.cunoc.edu.gt.utils.ValidatorInterceptor;
+import com.cunoc.edu.gt.proxies.TransactionalInterceptor;
+import com.cunoc.edu.gt.proxies.ValidatorInterceptor;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,14 +59,6 @@ public class BookController extends HttpServlet {
                 if (handler instanceof AuthorizationHandler) {
                     ((AuthorizationHandler) handler).setRequest(req);
                 }
-
-                UserResponse userResponse = (UserResponse) req.getSession().getAttribute(AttributeNameConstant.LOGIN_RESPONSE);
-                userResponse.setRolResponses(List.of(new RolResponse(1, RolName.ADMIN)));
-                userResponse.setAccessResponses(List.of(new AccessResponse(1, AccessName.CREDIT)));
-
-                req.getSession().setAttribute(AttributeNameConstant.LOGIN_RESPONSE, userResponse);
-
-                Logger.getLogger("BookController").info("User login: " + userResponse);
 
                 try {
                     BookResponse response = this.service.enrollBook(new BookRequest(1));

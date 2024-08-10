@@ -3,6 +3,7 @@ package com.cunoc.edu.gt.jpa.repository;
 import com.cunoc.edu.gt.data.pagination.Page;
 import com.cunoc.edu.gt.data.pagination.Pageable;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,4 +99,13 @@ public interface JpaRepository<ENTITY, ID> {
      * @return true if the entity exists, false otherwise
      */
     boolean existsById(ID id);
+
+    /**
+     * Method to process a lazy fetch
+     *
+     * @param relatedField the related field
+     * @param parentInstance the parent instance
+     * @param entityIdField the entity id field
+     */
+    void processFetchLazy(Field relatedField, ENTITY parentInstance, Field entityIdField);
 }

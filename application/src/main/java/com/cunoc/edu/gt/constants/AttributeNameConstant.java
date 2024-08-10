@@ -9,7 +9,6 @@ public class AttributeNameConstant {
     public static final String USER_RESPONSE = "user_response";
     public static final String CONNECTION = "connection";
     public static final String ACTION = "accion";
-    public static final String ERROR = "error";
     public static final String LOGIN_RESPONSE = "login_response";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
@@ -24,9 +23,6 @@ public class AttributeNameConstant {
     public static final String SHOW_LOGIN_BTN = "show_login_btn";
     public static final String SHOW_REGISTER_BTN = "show_register_btn";
 
-    // Rol name
-    public static final String USUARIO = "USUARIO";
-
     // Pagination
     public static final String PAGE = "page";
     public static final String SIZE = "size";
@@ -35,4 +31,8 @@ public class AttributeNameConstant {
 
     // Pages
     public static final String PAGE_USER = "page_user";
+
+    // Messages
+    public static final String ERROR = "error";
+    public static final String SUCCESS = "success";
 }
