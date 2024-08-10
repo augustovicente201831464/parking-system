@@ -1,6 +1,7 @@
 package com.cunoc.edu.gt.input.controller.auth;
 
 import com.cunoc.edu.gt.config.AuthorizationHandler;
+import com.cunoc.edu.gt.connection.CustomizedConnection;
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
 import com.cunoc.edu.gt.data.pagination.util.PageRequest;
@@ -10,11 +11,10 @@ import com.cunoc.edu.gt.data.request.auth.UserRequest;
 import com.cunoc.edu.gt.exception.BadOperationException;
 import com.cunoc.edu.gt.input.handling.auth.UserControllerHandling;
 import com.cunoc.edu.gt.output.persistence.adapter.auth.UserPA;
-import com.cunoc.edu.gt.output.persistence.connection.CustomizedConnection;
-import com.cunoc.edu.gt.service.auth.UserService;
+import com.cunoc.edu.gt.service.auth.   UserService;
 import com.cunoc.edu.gt.ucextends.auth.UserUC;
-import com.cunoc.edu.gt.utils.TransactionalInterceptor;
-import com.cunoc.edu.gt.utils.ValidatorInterceptor;
+import com.cunoc.edu.gt.proxies.TransactionalInterceptor;
+import com.cunoc.edu.gt.proxies.ValidatorInterceptor;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -74,16 +74,17 @@ public class UserController extends HttpServlet {
 
                 try {
                     session.setAttribute(AttributeNameConstant.LOGIN_RESPONSE, service.login(loginRequest));
-                    res.sendRedirect(FilenameConstant.HOME_JSP);
                     Logger.getLogger("UserController").info("User logged in successfully.");
+                    req.getSession().setAttribute(AttributeNameConstant.SUCCESS, String.format("Welcome %s", loginRequest.getUsername()));
+                    res.sendRedirect(FilenameConstant.HOME_JSP);
                 } catch (Exception e) {
                     Throwable rootCause = e;
                     while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
                         rootCause = rootCause.getCause();
                     }
 
-                    req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());
                     Logger.getLogger("UserController").info("User login failed: " + rootCause.getMessage());
+                    req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());
                     res.sendRedirect(FilenameConstant.LOGIN_JSP);
                 }
             }

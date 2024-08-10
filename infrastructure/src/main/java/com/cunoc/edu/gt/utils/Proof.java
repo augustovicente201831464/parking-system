@@ -1,12 +1,14 @@
 package com.cunoc.edu.gt.utils;
 
 import com.cunoc.edu.gt.config.AuthorizationHandler;
+import com.cunoc.edu.gt.connection.CustomizedConnection;
 import com.cunoc.edu.gt.data.pagination.util.PageRequest;
 import com.cunoc.edu.gt.data.pagination.util.Sort;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.output.persistence.adapter.auth.UserPA;
-import com.cunoc.edu.gt.output.persistence.connection.CustomizedConnection;
+import com.cunoc.edu.gt.proxies.TransactionalInterceptor;
+import com.cunoc.edu.gt.proxies.ValidatorInterceptor;
 import com.cunoc.edu.gt.service.auth.UserService;
 import com.cunoc.edu.gt.ucextends.auth.UserUC;
 
@@ -27,7 +29,7 @@ Proof {
 
     void login() {
         UserLoginRequest loginRequest = new UserLoginRequest();
-        loginRequest.setUsername("admin");
+        loginRequest.setUsername("CZ1163515243176271572447");
         loginRequest.setPassword("2023");
 
         UserResponse response = service.login(loginRequest);

@@ -1,13 +1,13 @@
 package com.cunoc.edu.gt.output.persistence.pmimpl;
 
-import com.cunoc.edu.gt.mapper.ModelMapperCustomized;
+import com.cunoc.edu.gt.hibernate.Hibernate;
+import com.cunoc.edu.gt.jpa.repository.JpaRepository;
+import com.cunoc.edu.gt.mapper.ModelMapper;
 import com.cunoc.edu.gt.model.auth.AccessDTO;
 import com.cunoc.edu.gt.model.auth.RolDTO;
 import com.cunoc.edu.gt.model.auth.UserDTO;
 import com.cunoc.edu.gt.output.persistence.entity.auth.User;
 import com.cunoc.edu.gt.pm.PersistenceMapper;
-
-import java.util.logging.Logger;
 
 /**
  * User persistence mapper
@@ -46,6 +46,14 @@ public class UserPM implements PersistenceMapper<User, UserDTO> {
     public UserDTO entityToDtoWithRelations(User entity) {
         UserDTO dto = this.modelMapper.map(entity, UserDTO.class);
 
+        if(Hibernate.notInitialized(entity.getRoles())){
+            Hibernate.initialize(repository, entity, "roles");
+        }
+
+        if(Hibernate.notInitialized(entity.getAccesses())){
+            Hibernate.initialize(repository, entity, "accesses");
+        }
+
         if (entity.getRoles() != null && !entity.getRoles().isEmpty()) {
             entity.getRoles().forEach(rol ->
                     dto.getRolDTOs().add(this.modelMapper.map(rol, RolDTO.class))
@@ -61,18 +69,20 @@ public class UserPM implements PersistenceMapper<User, UserDTO> {
         return dto;
     }
 
-    private UserPM() {
-        this.modelMapper = ModelMapperCustomized.getInstance();
+    private UserPM(JpaRepository repository) {
+        this.modelMapper = ModelMapper.getInstance();
+        this.repository = repository;
     }
 
-    public static UserPM getInstance() {
+    public static UserPM getInstance(JpaRepository repository) {
         if (instance == null) {
-            instance = new UserPM();
+            instance = new UserPM(repository);
         }
 
         return instance;
     }
 
     private static UserPM instance;
-    private final ModelMapperCustomized modelMapper;
+    private final ModelMapper modelMapper;
+    private final JpaRepository repository;
 }

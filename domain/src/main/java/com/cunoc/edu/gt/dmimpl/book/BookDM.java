@@ -3,7 +3,7 @@ package com.cunoc.edu.gt.dmimpl.book;
 import com.cunoc.edu.gt.data.request.books.BookRequest;
 import com.cunoc.edu.gt.data.response.books.BookResponse;
 import com.cunoc.edu.gt.dm.DomainMapper;
-import com.cunoc.edu.gt.mapper.ModelMapperCustomized;
+import com.cunoc.edu.gt.mapper.ModelMapper;
 import com.cunoc.edu.gt.model.book.BookDTO;
 
 public class BookDM implements DomainMapper<BookDTO, BookRequest, BookResponse> {
@@ -31,7 +31,7 @@ public class BookDM implements DomainMapper<BookDTO, BookRequest, BookResponse> 
     }
 
     private BookDM() {
-        this.modelMapper = ModelMapperCustomized.getInstance();
+        this.modelMapper = ModelMapper.getInstance();
     }
 
     public static BookDM getInstance() {
@@ -43,5 +43,5 @@ public class BookDM implements DomainMapper<BookDTO, BookRequest, BookResponse> 
     }
 
     private static BookDM instance;
-    private final ModelMapperCustomized modelMapper;
+    private final ModelMapper modelMapper;
 }

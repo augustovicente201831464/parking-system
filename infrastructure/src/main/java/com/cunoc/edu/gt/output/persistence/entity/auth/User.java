@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Entity User
+ * Entity User for the database
  *
  * @Author: Augusto Vicente
  */
@@ -49,7 +49,7 @@ public class User extends AuditAttributeAuth {
             inverseJoinColumns = @JoinColumn(name = "rol_codigo", referencedColumnName = "codigo"))
     private List<Rol> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_access",
             joinColumns = @JoinColumn(name = "usuario_codigo", referencedColumnName = "codigo"),
             inverseJoinColumns = @JoinColumn(name = "acceso_codigo", referencedColumnName = "codigo"))

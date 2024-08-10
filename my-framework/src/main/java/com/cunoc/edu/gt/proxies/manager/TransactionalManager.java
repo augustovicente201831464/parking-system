@@ -1,4 +1,4 @@
-package com.cunoc.edu.gt.utils;
+package com.cunoc.edu.gt.proxies.manager;
 
 import lombok.Getter;
 

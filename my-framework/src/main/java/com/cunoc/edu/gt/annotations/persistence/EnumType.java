@@ -3,7 +3,7 @@ package com.cunoc.edu.gt.annotations.persistence;
 /**
  * EnumType enum
  *
- * @Author: Gomugomu NoCode
+ * @Author: Augusto Vicente
  */
 public enum EnumType {
     ORDINAL,

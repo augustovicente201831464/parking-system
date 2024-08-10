@@ -1,6 +1,7 @@
-package com.cunoc.edu.gt.utils;
+package com.cunoc.edu.gt.proxies;
 
 import com.cunoc.edu.gt.annotations.validation.Valid;
+import com.cunoc.edu.gt.proxies.manager.ValidatorManager;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationHandler;

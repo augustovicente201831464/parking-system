@@ -1,6 +1,7 @@
-package com.cunoc.edu.gt.utils;
+package com.cunoc.edu.gt.proxies;
 
 import com.cunoc.edu.gt.annotations.persistence.Transactional;
+import com.cunoc.edu.gt.proxies.manager.TransactionalManager;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationHandler;
@@ -40,9 +41,6 @@ public class TransactionalInterceptor implements InvocationHandler {
             }
             return result;
         }
-
-        Logger.getLogger("TransactionalInterceptor").info("Method " + method.getName() + " is not transactional");
-
         return method.invoke(target, args);
     }
 

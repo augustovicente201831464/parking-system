@@ -33,15 +33,15 @@ public class UserService implements UserUC {
     @Override
     @SneakyThrows
     public UserResponse login(UserLoginRequest loginRequest) {
-        if(loginRequest == null){
+        if (loginRequest == null) {
             throw new BadOperationException(String.format("In the %s method of %s the login request is required.", "login", "UserService"));
         }
 
-        if(loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty()){
+        if (loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty()) {
             throw new InvalidDataException(String.format("In the %s method of %s the username is required.", "login", "UserService"));
         }
 
-        if(loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()){
+        if (loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
             throw new InvalidDataException(String.format("In the %s method of %s the password is required.", "login", "UserService"));
         }
 
@@ -53,7 +53,7 @@ public class UserService implements UserUC {
         //Validate request
         UserHelper.validateUserRequest(request);
 
-        if(request.getPassword().compareTo(request.getPasswordConfirmation()) != 0){
+        if (request.getPassword().compareTo(request.getPasswordConfirmation()) != 0) {
             throw new InvalidDataException("Passwords do not match");
         }
 
@@ -73,7 +73,7 @@ public class UserService implements UserUC {
 
         dto = outputPort.save((UserDTO) auditAttributeAuthService.getAuditAttributeAuthForNew(dto));
 
-        eventPublisher.handle(new DisplayEvent<>("User saved", LocalDateTime.now(), "System" ,"UserService", "save", TransactionId.generateTransactionId(), dto.getId()));
+        eventPublisher.handle(new DisplayEvent<>("User saved", LocalDateTime.now(), "System", "UserService", "save", TransactionId.generateTransactionId(), dto.getId()));
 
         return domainMapper.dtoToResponse(dto);
     }
@@ -111,7 +111,7 @@ public class UserService implements UserUC {
                 .map(domainMapper::dtoToResponseWithRelations)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        eventPublisher.handle(new DisplayEvent<>("User retrieved by id", LocalDateTime.now(), "System" ,"UserService", "getById", TransactionId.generateTransactionId(), ID));
+        eventPublisher.handle(new DisplayEvent<>("User retrieved by id", LocalDateTime.now(), "System", "UserService", "getById", TransactionId.generateTransactionId(), ID));
 
         return response;
     }
@@ -129,7 +129,7 @@ public class UserService implements UserUC {
 
         Logger.getLogger("UserService").info("User retrieved by pageable: " + response.getContent());
 
-        eventPublisher.handle(new DisplayEvent<>("User retrieved by pageable", LocalDateTime.now(), "System" ,"UserService", "getPage", TransactionId.generateTransactionId(), pageable));
+        eventPublisher.handle(new DisplayEvent<>("User retrieved by pageable", LocalDateTime.now(), "System", "UserService", "getPage", TransactionId.generateTransactionId(), pageable));
 
         return response;
     }
@@ -143,12 +143,17 @@ public class UserService implements UserUC {
      */
     @Override
     @SneakyThrows
-    public  UserResponse getByUsername(String username, String password){
-        UserResponse response = outputPort.getByUsername(username, password)
-                .map(domainMapper::dtoToResponseWithRelations)
+    public UserResponse getByUsername(String username, String password) {
+        UserResponse response = outputPort.getByUsername(username)
+                .map(user -> {
+                    if (!BCrypt.checkpw(password, user.getPassword())) {
+                        return null;
+                    }
+                    return domainMapper.dtoToResponseWithRelations(user);
+                })
                 .orElseThrow(() -> new NotFoundException("Username / Password is incorrect"));
 
-        eventPublisher.handle(new DisplayEvent<>("User retrieved by username", LocalDateTime.now(), "System" ,"UserService", "getByUsername", TransactionId.generateTransactionId(), response.getId()));
+        eventPublisher.handle(new DisplayEvent<>("User retrieved by username", LocalDateTime.now(), "System", "UserService", "getByUsername", TransactionId.generateTransactionId(), username));
 
         return response;
     }

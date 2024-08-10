@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @Author: KojStar Innovations
  */
-public class ModelMapperCustomized {
+public class ModelMapper {
 
     /**
      * The method map
@@ -89,9 +89,6 @@ public class ModelMapperCustomized {
         Class<?> sourceFieldType = value.getClass();
 
         if (destinationFieldType.isEnum() && sourceFieldType.equals(String.class)) {
-
-            //If value = "" then return ""
-
             try {
                 return Enum.valueOf((Class<Enum>) destinationFieldType, (String) value);
             } catch (IllegalArgumentException e) {
@@ -106,15 +103,15 @@ public class ModelMapperCustomized {
         throw new MapperException("Incompatible data types for field. Expected '" + destinationFieldType.getName() + "' but found '" + sourceFieldType.getName() + "'");
     }
 
-    private ModelMapperCustomized() {
+    private ModelMapper() {
     }
 
-    public static ModelMapperCustomized getInstance() {
+    public static ModelMapper getInstance() {
         if (instance == null) {
-            instance = new ModelMapperCustomized();
+            instance = new ModelMapper();
         }
         return instance;
     }
 
-    private static ModelMapperCustomized instance;
+    private static ModelMapper instance;
 }
