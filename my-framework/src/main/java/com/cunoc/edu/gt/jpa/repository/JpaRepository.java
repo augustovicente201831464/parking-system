@@ -1,4 +1,7 @@
-package com.cunoc.edu.gt.annotations.repository;
+package com.cunoc.edu.gt.jpa.repository;
+
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +67,14 @@ public interface JpaRepository<ENTITY, ID> {
      * @return all entities
      */
     List<ENTITY> getAll();
+
+    /**
+     * Method to get a page of entities
+     *
+     * @param pageable the page to be retrieved
+     * @return a page of entities
+     */
+    Page<ENTITY> getPage(Pageable pageable);
 
     /**
      * Method to get a page of entities

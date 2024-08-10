@@ -1,5 +1,7 @@
 package com.cunoc.edu.gt.service.auth;
 
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
 import com.cunoc.edu.gt.data.response.auth.UserResponse;
@@ -19,6 +21,7 @@ import lombok.SneakyThrows;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 /**
  * Service to manage the user transactions
@@ -104,7 +107,31 @@ public class UserService implements UserUC {
      */
     @Override
     public UserResponse getById(Integer ID) {
-        return null;
+        UserResponse response = outputPort.getById(ID)
+                .map(domainMapper::dtoToResponseWithRelations)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        eventPublisher.handle(new DisplayEvent<>("User retrieved by id", LocalDateTime.now(), "System" ,"UserService", "getById", TransactionId.generateTransactionId(), ID));
+
+        return response;
+    }
+
+    /**
+     * Get all objects
+     *
+     * @param pageable the pageable object
+     * @return Page<Response> the page of objects
+     */
+    @Override
+    public Page<UserResponse> getPage(Pageable pageable) {
+        Page<UserResponse> response = outputPort.getPage(pageable)
+                .map(domainMapper::dtoToResponse);
+
+        Logger.getLogger("UserService").info("User retrieved by pageable: " + response.getContent());
+
+        eventPublisher.handle(new DisplayEvent<>("User retrieved by pageable", LocalDateTime.now(), "System" ,"UserService", "getPage", TransactionId.generateTransactionId(), pageable));
+
+        return response;
     }
 
     /**
@@ -118,7 +145,7 @@ public class UserService implements UserUC {
     @SneakyThrows
     public  UserResponse getByUsername(String username, String password){
         UserResponse response = outputPort.getByUsername(username, password)
-                .map(domainMapper::dtoToResponse)
+                .map(domainMapper::dtoToResponseWithRelations)
                 .orElseThrow(() -> new NotFoundException("Username / Password is incorrect"));
 
         eventPublisher.handle(new DisplayEvent<>("User retrieved by username", LocalDateTime.now(), "System" ,"UserService", "getByUsername", TransactionId.generateTransactionId(), response.getId()));

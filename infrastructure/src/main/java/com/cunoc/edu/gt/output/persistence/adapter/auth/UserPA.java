@@ -1,5 +1,7 @@
 package com.cunoc.edu.gt.output.persistence.adapter.auth;
 
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 import com.cunoc.edu.gt.model.auth.UserDTO;
 import com.cunoc.edu.gt.opextends.UserOP;
 import com.cunoc.edu.gt.output.persistence.entity.auth.User;
@@ -10,8 +12,8 @@ import lombok.SneakyThrows;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * Persistence Adapter for User
@@ -35,7 +37,7 @@ public class UserPA implements UserOP {
                     if (!validPassword(user, password)) {
                         return null;
                     }
-                    return persistenceMapper.entityToDto(user);
+                    return persistenceMapper.entityToDtoWithRelations(user);
                 }
         );
     }
@@ -63,7 +65,8 @@ public class UserPA implements UserOP {
      */
     @Override
     public Optional<UserDTO> getById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return repository.findById(id)
+                .map(persistenceMapper::entityToDtoWithRelations);
     }
 
     /**
@@ -97,6 +100,30 @@ public class UserPA implements UserOP {
     @Override
     public boolean existsById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Method to get all modelDto
+     *
+     * @return List of modelDto
+     */
+    @Override
+    public List<UserDTO> getAll() {
+        return repository.getAll().stream()
+                .map(persistenceMapper::entityToDto)
+                .toList();
+    }
+
+    /**
+     * Method to get all modelDto with pagination
+     *
+     * @param pageable the pagination information
+     * @return Page of modelDto
+     */
+    @Override
+    public Page<UserDTO> getPage(Pageable pageable) {
+        return repository.getPage(pageable)
+                .map(persistenceMapper::entityToDto);
     }
 
     /**

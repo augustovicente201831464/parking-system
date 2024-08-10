@@ -13,7 +13,7 @@ public class SecurityService {
             return false;
         }
 
-        return userResponse.getRoleResponses()
+        return userResponse.getRolResponses()
                 .stream()
                 .anyMatch(rolResponse -> rolResponse.getRolName().toString().equals(role));
     }

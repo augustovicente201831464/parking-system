@@ -1,6 +1,7 @@
 package com.cunoc.edu.gt.ports.input;
 
-import com.cunoc.edu.gt.annotations.persistence.Transactional;
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 
 /**
  * Generic get use case
@@ -18,4 +19,12 @@ public interface GetUseCase<Response, ID> {
      * @return Response
      */
     Response getById(ID ID);
+
+    /**
+     * Get all objects
+     *
+     * @param pageable Pageable object
+     * @return Page<Response>
+     */
+    Page<Response> getPage(Pageable pageable);
 }

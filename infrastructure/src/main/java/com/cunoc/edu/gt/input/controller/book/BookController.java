@@ -3,6 +3,9 @@ package com.cunoc.edu.gt.input.controller.book;
 import com.cunoc.edu.gt.config.AuthorizationHandler;
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.util.PageRequest;
+import com.cunoc.edu.gt.data.pagination.util.Sort;
 import com.cunoc.edu.gt.data.request.books.BookRequest;
 import com.cunoc.edu.gt.data.response.auth.AccessResponse;
 import com.cunoc.edu.gt.data.response.auth.RolResponse;
@@ -58,7 +61,7 @@ public class BookController extends HttpServlet {
                 }
 
                 UserResponse userResponse = (UserResponse) req.getSession().getAttribute(AttributeNameConstant.LOGIN_RESPONSE);
-                userResponse.setRoleResponses(List.of(new RolResponse(1, RolName.ADMIN)));
+                userResponse.setRolResponses(List.of(new RolResponse(1, RolName.ADMIN)));
                 userResponse.setAccessResponses(List.of(new AccessResponse(1, AccessName.CREDIT)));
 
                 req.getSession().setAttribute(AttributeNameConstant.LOGIN_RESPONSE, userResponse);
@@ -81,6 +84,28 @@ public class BookController extends HttpServlet {
                 }
             }
             case "update" -> throw new UnsupportedOperationException("Not implemented yet");
+            case "get-page" -> {
+                try {
+                    int page = Integer.parseInt(req.getParameter(AttributeNameConstant.PAGE) == null ? "1" : req.getParameter(AttributeNameConstant.PAGE));
+                    int size = Integer.parseInt(req.getParameter(AttributeNameConstant.SIZE) == null ? "10" : req.getParameter(AttributeNameConstant.SIZE));
+                    String orders = req.getParameter(AttributeNameConstant.SORT) == null ? "id" : req.getParameter(AttributeNameConstant.SORT);
+                    boolean asc = Boolean.parseBoolean(req.getParameter(AttributeNameConstant.DIRECTION) == null ? "true" : req.getParameter(AttributeNameConstant.DIRECTION));
+
+                    Page<BookResponse> response = this.service.getPage(PageRequest.of(page, size, Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, orders)));
+
+                    throw new UnsupportedOperationException("Not implemented yet");
+                } catch (Exception e) {
+                    Throwable rootCause = e;
+
+                    while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                        rootCause = rootCause.getCause();
+                    }
+
+                    req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());
+                    Logger.getLogger("BookController").info("Book enrollment failed: " + rootCause.getMessage());
+                    res.sendRedirect(FilenameConstant.HOME_JSP);
+                }
+            }
             default -> throw new UnsupportedOperationException("Action not supported");
         }
     }

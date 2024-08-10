@@ -35,6 +35,12 @@
             <version>0.0.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.cunoc.edu.gt</groupId>
+            <artifactId>my-framework</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -70,14 +76,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
         </dependency>
-
-        <!-- temporary -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>4.8.0</version>
-        </dependency>
-
     </dependencies>
 
     <build>

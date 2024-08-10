@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "accesses")
+@Entity(name = "access")
 public class Access extends AuditAttributeAuth {
 
     @Id

@@ -44,7 +44,27 @@
                     </div>
 
                     <form id="book-form" class="form-group"
-                          action="${pageContext.request.contextPath}/libros?accion=enroll" method="POST">
+                          action="${pageContext.request.contextPath}/usuario?accion=get-page" method="POST">
+
+                        <label for="page">Página:</label>
+                        <input type="number" id="page" name="page" class="form-control" required>
+                        <br>
+                        <label for="size">Tamaño:</label>
+                        <input type="number" id="size" name="size" class="form-control" required>
+                        <br>
+                        <label for="sort">Ordenar por:</label>
+                        <select id="sort" name="sort" class="form-control">
+                            <option value="id">ID</option>
+                            <option value="username">Nombre de usuario</option>
+                            <option value="status">Estado</option>
+                        </select>
+                        <br>
+                        <label for="direction">Dirección:</label>
+                        <select id="direction" name="direction" class="form-control">
+                            <option value="ASC">Ascendente</option>
+                            <option value="DESC">Descendente</option>
+                        </select>
+
                         <button type="submit" class="btn btn-primary">Inscribir</button>
                     </form>
 

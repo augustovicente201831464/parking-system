@@ -15,6 +15,12 @@
     --modal-btn-close-hover-color: rgb(124, 106, 1);
     --modal-content-border: 1px solid rgb(0, 0, 0);
 
+    /* User menu styles */
+    --user-menu-border: 1px solid rgb(0, 0, 0);
+    --user-menu-bg-color: rgb(0, 133, 143);
+    --user-menu-gb-color-hover: rgb(0, 115, 26);
+    --user-menu-color: rgb(254, 254, 254);
+
     /* Card styles */
     --card-content-bg-color: rgb(254, 254, 254);
     --card-border: 1px solid rgb(0, 0, 0);
@@ -49,6 +55,12 @@ body.dark-mode {
     --modal-btn-close-color: rgb(254, 254, 254);
     --modal-btn-close-hover-color: rgb(254, 254, 254);
     --modal-content-border: 1px solid rgb(254, 254, 254);
+
+    /* User menu styles */
+    --user-menu-border: 1px solid rgb(254, 254, 254);
+    --user-menu-bg-color: rgb(0, 133, 143);
+    --user-menu-gb-color-hover: rgb(0, 115, 26);
+    --user-menu-color: rgb(254, 254, 254);
 
     /* Card styles */
     --card-content-bg-color: rgb(60, 63, 65);

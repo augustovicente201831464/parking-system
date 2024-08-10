@@ -1,7 +1,8 @@
 package com.cunoc.edu.gt.output.persistence.repository.implement;
 
+import com.cunoc.edu.gt.jpa.repository.repimpl.JpaRepositoryImpl;
 import com.cunoc.edu.gt.output.persistence.entity.auth.User;
-import com.cunoc.edu.gt.output.persistence.repository.ReflectionUtils;
+import com.cunoc.edu.gt.utils.ReflectionUtils;
 import com.cunoc.edu.gt.output.persistence.repository.extend.UserRepository;
 import lombok.SneakyThrows;
 
