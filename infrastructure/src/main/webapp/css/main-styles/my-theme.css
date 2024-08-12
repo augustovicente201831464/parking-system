@@ -6,6 +6,7 @@
     --title-color: rgb(0, 0, 0);
     --primary-color: rgb(0, 0, 0);
     --primary-shadow: 1px 1px 1px rgb(20, 20, 20, 0.3);
+    --text-muted: rgb(99, 99, 99);
 
     /* Modal styles */
     --modal-bg-color: rgba(0, 0, 0, 0.1);
@@ -14,6 +15,8 @@
     --modal-btn-close-color: rgb(0, 0, 0);
     --modal-btn-close-hover-color: rgb(124, 106, 1);
     --modal-content-border: 1px solid rgb(0, 0, 0);
+    --scrollbar-thumb-color: rgb(99, 99, 99);
+    --scrollbar-thumb-color-hover: rgb(124, 106, 1);
 
     /* User menu styles */
     --user-menu-border: 1px solid rgb(0, 0, 0);
@@ -37,6 +40,13 @@
     --fg-btn-color: rgb(254, 254, 254);
     --fg-btn-text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.4);
     --fg-form-control-bg-color: rgb(254, 254, 254);
+
+    /* Left side menu styles */
+    --bg-left-side-menu: rgb(26, 46, 53);
+    --left-side-menu-fa-color: rgb(254, 254, 254);
+    --left-side-menu-nav-color: rgb(254, 254, 254);
+    --left-side-menu-a-hover-color: rgb(254, 254, 254);
+    --left-side-menu-a-hover-bg-color: rgb(0, 115, 26);
 }
 
 body.dark-mode {
@@ -47,6 +57,7 @@ body.dark-mode {
     --title-color: rgb(254, 254, 254);
     --primary-color: rgb(254, 254, 254);
     --primary-shadow: 1px 1px 1px rgb(20, 20, 20, 0.3);
+    --text-muted: rgb(253, 253, 253);
 
     /* Modal styles */
     --modal-bg-color: rgba(255, 255, 255, 0.1);
@@ -55,6 +66,8 @@ body.dark-mode {
     --modal-btn-close-color: rgb(254, 254, 254);
     --modal-btn-close-hover-color: rgb(254, 254, 254);
     --modal-content-border: 1px solid rgb(254, 254, 254);
+    --scrollbar-thumb-color: rgb(99, 99, 99);
+    --scrollbar-thumb-color-hover: rgb(124, 106, 1);
 
     /* User menu styles */
     --user-menu-border: 1px solid rgb(254, 254, 254);
@@ -78,4 +91,11 @@ body.dark-mode {
     --fg-btn-color: rgb(254, 254, 254);
     --fg-btn-text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.4);
     --fg-form-control-bg-color: rgb(60, 63, 65);
+
+    /* Left side menu styles */
+    --bg-left-side-menu: rgb(26, 46, 53);
+    --left-side-menu-fa-color: rgb(254, 254, 254);
+    --left-side-menu-nav-color: rgb(254, 254, 254);
+    --left-side-menu-a-hover-color: rgb(254, 254, 254);
+    --left-side-menu-a-hover-bg-color: rgb(0, 115, 26);
 }

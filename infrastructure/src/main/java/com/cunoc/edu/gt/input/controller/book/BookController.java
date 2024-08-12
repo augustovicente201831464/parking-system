@@ -14,6 +14,7 @@ import com.cunoc.edu.gt.data.response.auth.UserResponse;
 import com.cunoc.edu.gt.data.response.books.BookResponse;
 import com.cunoc.edu.gt.enums.AccessName;
 import com.cunoc.edu.gt.enums.RolName;
+import com.cunoc.edu.gt.input.handling.pagination.PaginationHandling;
 import com.cunoc.edu.gt.service.AuditAttributeService;
 import com.cunoc.edu.gt.service.book.BookService;
 import com.cunoc.edu.gt.ucextends.books.BookUC;
@@ -78,12 +79,8 @@ public class BookController extends HttpServlet {
             case "update" -> throw new UnsupportedOperationException("Not implemented yet");
             case "get-page" -> {
                 try {
-                    int page = Integer.parseInt(req.getParameter(AttributeNameConstant.PAGE) == null ? "1" : req.getParameter(AttributeNameConstant.PAGE));
-                    int size = Integer.parseInt(req.getParameter(AttributeNameConstant.SIZE) == null ? "10" : req.getParameter(AttributeNameConstant.SIZE));
-                    String orders = req.getParameter(AttributeNameConstant.SORT) == null ? "id" : req.getParameter(AttributeNameConstant.SORT);
-                    boolean asc = Boolean.parseBoolean(req.getParameter(AttributeNameConstant.DIRECTION) == null ? "true" : req.getParameter(AttributeNameConstant.DIRECTION));
 
-                    Page<BookResponse> response = this.service.getPage(PageRequest.of(page, size, Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, orders)));
+                    Page<BookResponse> response = this.service.getPage(PaginationHandling.handlePagination(req));
 
                     throw new UnsupportedOperationException("Not implemented yet");
                 } catch (Exception e) {

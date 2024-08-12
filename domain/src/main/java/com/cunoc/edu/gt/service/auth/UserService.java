@@ -126,9 +126,6 @@ public class UserService implements UserUC {
     public Page<UserResponse> getPage(Pageable pageable) {
         Page<UserResponse> response = outputPort.getPage(pageable)
                 .map(domainMapper::dtoToResponse);
-
-        Logger.getLogger("UserService").info("User retrieved by pageable: " + response.getContent());
-
         eventPublisher.handle(new DisplayEvent<>("User retrieved by pageable", LocalDateTime.now(), "System", "UserService", "getPage", TransactionId.generateTransactionId(), pageable));
 
         return response;

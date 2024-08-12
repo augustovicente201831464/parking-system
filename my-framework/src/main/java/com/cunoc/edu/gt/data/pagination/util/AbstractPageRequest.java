@@ -2,6 +2,7 @@ package com.cunoc.edu.gt.data.pagination.util;
 
 import com.cunoc.edu.gt.data.pagination.Pageable;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public abstract class AbstractPageRequest implements Pageable, Serializable {
@@ -83,5 +84,6 @@ public abstract class AbstractPageRequest implements Pageable, Serializable {
     private final int pageNumber;
     private final int pageSize;
 
+    @Serial
     private static final long serialVersionUID = 1232825578694716871L;
 }

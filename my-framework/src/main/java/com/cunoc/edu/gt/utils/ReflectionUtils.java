@@ -1,6 +1,7 @@
 package com.cunoc.edu.gt.utils;
 
 import com.cunoc.edu.gt.annotations.persistence.*;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 import com.cunoc.edu.gt.exception.NotFoundException;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -13,9 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -308,5 +307,33 @@ public class ReflectionUtils {
         } else {
             return null;
         }
+    }
+
+    public static Set<String> getValidColumns(Class<?> entity) {
+        Set<String> columns = new HashSet<>();
+        List<Field> fields = getAllFields(entity);
+
+        for (Field field : fields) {
+            columns.add(columnName(field));
+        }
+
+        return columns;
+    }
+
+    public static Set<String> getValidColumns(List<Field> fields) {
+        Set<String> columns = new HashSet<>();
+
+        for (Field field : fields) {
+            columns.add(columnName(field));
+        }
+
+        return columns;
+    }
+
+    public static String getOrder(Pageable pageable) {
+        return pageable.getSort().getOrder();
+    }
+    public static String getAscOrDesc(Pageable pageable) {
+        return pageable.getSort().getDirection().name().toUpperCase();
     }
 }

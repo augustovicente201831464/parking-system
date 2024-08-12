@@ -24,7 +24,7 @@ public class AttributeNameConstant {
     public static final String SHOW_REGISTER_BTN = "show_register_btn";
 
     // Pagination
-    public static final String PAGE = "page";
+    public static final String PAGE = "page_number";
     public static final String SIZE = "size";
     public static final String SORT = "sort";
     public static final String DIRECTION = "direction";
@@ -35,4 +35,5 @@ public class AttributeNameConstant {
     // Messages
     public static final String ERROR = "error";
     public static final String SUCCESS = "success";
+    public static final String LIST_USERS = "list_users";
 }

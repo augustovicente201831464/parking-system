@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -250,8 +251,19 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
         try {
             ENTITY entityInstance = entity.getDeclaredConstructor().newInstance();
             String entityName = ReflectionUtils.entityName(entity);
+            String order = ReflectionUtils. getOrder(pageable);
+            String ascOrDesc = ReflectionUtils.getAscOrDesc(pageable);
 
             List<Field> fields = ReflectionUtils.getAllFields(entity);
+
+            Set<String> validColumns = ReflectionUtils.getValidColumns(fields);
+            if (!validColumns.contains(order)) {
+                throw new IllegalArgumentException("Columna de ordenamiento no válida: " + order);
+            }
+
+            if (!ascOrDesc.equalsIgnoreCase("ASC") && !ascOrDesc.equalsIgnoreCase("DESC")) {
+                throw new IllegalArgumentException("Dirección de ordenamiento no válida: " + ascOrDesc);
+            }
 
             long totalElements = 0;
             preparedStatement = connection.prepareStatement(String.format("SELECT COUNT(*) AS count FROM %s;", entityName));
@@ -261,18 +273,25 @@ public class JpaRepositoryImpl<ENTITY, ID> implements JpaRepository<ENTITY, ID> 
                 totalElements = resultSet.getLong("count");
             }
 
-            preparedStatement = connection.prepareStatement(String.format("SELECT * FROM %s LIMIT ? OFFSET ?;", entityName));
+            preparedStatement = connection.prepareStatement(String.format("SELECT * FROM %s ORDER BY %s %s LIMIT ? OFFSET ?;", entityName, order, ascOrDesc));
             preparedStatement.setInt(1, pageable.getPageSize());
             preparedStatement.setLong(2, pageable.getOffset());
+
+            Logger.getLogger("JpaRepositoryImpl").info("SQL Query: " + preparedStatement);
 
             resultSet = preparedStatement.executeQuery();
 
             List<ENTITY> entities = ReflectionUtils.getEntitiesFromResultSet(resultSet, entity);
 
+            //Sort the entities
+            String orderBy = pageable.getSort().getOrder();
+            String direction = pageable.getSort().getDirection().name();
+
+
             return new PageImpl<>(entities, pageable, totalElements);
         } catch (Exception e) {
             Logger.getLogger("JpaRepositoryImpl").warning("Error getting page: " + e.getMessage());
-            throw new SqlExceptionCustomized("Error getting page: " + e.getMessage());
+            throw new SqlExceptionCustomized(e.getMessage());
         } finally {
             ConnectionHelper.closeResultSet(resultSet);
             ConnectionHelper.closePreparedStatement(preparedStatement);

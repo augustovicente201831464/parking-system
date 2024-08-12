@@ -18,7 +18,7 @@ function closeModal() {
 
 window.onclick = function(event) {
     const modal = document.getElementById("form-modal");
-    if (event.target == modal) {
+    if (event.target === modal) {
         modal.style.display = "none";
     }
 }
