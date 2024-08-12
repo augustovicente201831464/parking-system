@@ -1,4 +1,5 @@
 <%@ page import="com.cunoc.edu.gt.constants.AttributeNameConstant" %>
+<%@ page import="com.cunoc.edu.gt.constants.FilenameConstant" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -22,25 +23,25 @@
     <jsp:include page="/toastr/toastr.jsp"/>
 </head>
 
+<%
+    if (request.getSession().getAttribute(AttributeNameConstant.LOGIN_RESPONSE) == null) {
+        request.getSession().setAttribute(AttributeNameConstant.ERROR, "No se ha iniciado sesión.");
+        response.sendRedirect(String.format("%s/%s", request.getContextPath(), FilenameConstant.LOGIN_JSP));
+    }
+%>
+
 <body class="background user">
-<c:choose>
-    <c:when test="${false}">
-        <c:redirect url="/auth/login/login.jsp"/>
-    </c:when>
-    <c:otherwise>
-        <jsp:include page="../../main/main-menu/main-menu.jsp"/>
+<jsp:include page="../../main/main-menu/main-menu.jsp"/>
 
-        <div class="wrapper">
-            <div class="left--side-menu">
-                <jsp:include page="../../users/users-menu/users-menu.jsp"/>
-            </div>
+<div class="wrapper">
+    <div class="left--side-menu">
+        <jsp:include page="../../users/users-menu/users-menu.jsp"/>
+    </div>
 
-            <div class="content-comp" id="dynamic-content">
-                <!-- jsp dinamico -->
-            </div>
-        </div>
-    </c:otherwise>
-</c:choose>
+    <div class="content-comp" id="dynamic-content">
+        <!-- jsp dinamico -->
+    </div>
+</div>
 
 <jsp:include page="../../modal-dynamic/form-modal/form-modal.jsp"/>
 <script src="<c:url value='/modal-dynamic/form-modal/form-modal.js' />"></script>

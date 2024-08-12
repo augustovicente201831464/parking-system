@@ -1,4 +1,6 @@
 <%@ page import="com.cunoc.edu.gt.constants.AttributeNameConstant" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.cunoc.edu.gt.data.response.auth.UserResponse" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -41,6 +43,25 @@
                         </div>
                         <div class="d-flex justify-content-center mt-2">
                             <h3 class="text-center">Estado: <span class="span-user">${login_response.status}</span></h3>
+                        </div>
+                        <div class="d-flex justify-content-center mt-2">
+                            <%
+                                UserResponse loggedUser = (UserResponse) request.getSession().getAttribute(AttributeNameConstant.LOGIN_RESPONSE);
+                                List<String> roles = loggedUser.getRolResponses().stream().map(r -> r.getRolName().toString()).toList();
+                                List<String> accesses = loggedUser.getAccessResponses().stream().map(a -> a.getAccessName().toString()).toList();
+                            %>
+                            <label for="roles" class="text-center">Roles:</label>
+                            <select name="roles" id="roles" class="form-select" multiple>
+                                <% for (String role : roles) { %>
+                                <option value="<%= role %>"><%= role %></option>
+                                <% } %>
+                            </select>
+                            <label for="accesses" class="text-center">Accesos:</label>
+                            <select name="accesses" id="accesses" class="form-select" multiple>
+                                <% for (String access : accesses) { %>
+                                <option value="<%= access %>"><%= access %></option>
+                                <% } %>
+                            </select>
                         </div>
                     </div>
                 </div>

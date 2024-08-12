@@ -3,6 +3,8 @@ package com.cunoc.edu.gt.ucextends.auth;
 import com.cunoc.edu.gt.annotations.auth.PreAuthorize;
 import com.cunoc.edu.gt.annotations.persistence.Transactional;
 import com.cunoc.edu.gt.annotations.validation.Valid;
+import com.cunoc.edu.gt.data.pagination.Page;
+import com.cunoc.edu.gt.data.pagination.Pageable;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
 import com.cunoc.edu.gt.data.response.auth.UserResponse;
@@ -39,4 +41,9 @@ public interface UserUC extends UseCase<UserRequest, UserResponse, Integer> {
      */
     @Transactional
     UserResponse getByUsername(String username, String password);
+
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    Page<UserResponse> getPage(Pageable pageable);
 }

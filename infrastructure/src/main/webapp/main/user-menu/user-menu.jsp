@@ -11,7 +11,7 @@
 
     <%
         UserResponse userLogin = (UserResponse) session.getAttribute(AttributeNameConstant.LOGIN_RESPONSE);
-        boolean displayableUserItem = UserHelper.containAccessOrRole(AccessName.USER, RolName.ADMIN, userLogin);
+        boolean displayableUserItem = UserHelper.containAccessOrRole(AccessName.ADMIN, RolName.ADMIN, userLogin);
         boolean displayableVehicleItem = UserHelper.containAccessOrRole(AccessName.VEHICLE, RolName.ADMIN, userLogin);
         boolean displayableCustomerItem = UserHelper.containAccessOrRole(AccessName.CUSTOMER, RolName.ADMIN, userLogin);
     %>

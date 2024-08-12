@@ -4,6 +4,7 @@
 <%@ page import="com.cunoc.edu.gt.data.pagination.Page" %>
 <%@ page import="com.cunoc.edu.gt.data.pagination.util.Sort" %>
 <%@ page import="java.util.logging.Logger" %>
+<%@ page import="com.cunoc.edu.gt.constants.FilenameConstant" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
 <jsp:include page="../../toastr/toastr.jsp"/>
@@ -20,9 +21,15 @@
     <div class="grid-item">
 
         <div class="page-request">
-
             <%
                 Page<UserResponse> pageOfUsers = (Page<UserResponse>) request.getSession().getAttribute(AttributeNameConstant.PAGE_USER);
+
+                if (pageOfUsers == null) {
+                    Logger.getLogger("UserList").warning("No page of users found in session.");
+                    response.sendRedirect(FilenameConstant.HOME_JSP);
+                    return;
+                }
+
                 List<UserResponse> users = pageOfUsers.getContent();
             %>
             <%
@@ -47,27 +54,48 @@
                     }
                 } %>
 
-            <label for="session-total" style="display: none;">Current page</label>
-            <input type="hidden" id="session-page" value="<%= currentPage %>"/>
-            <label for="session-size">Size</label>
-            <input id="session-size" value="<%= pageOfUsers.getSize() %>" class="form-control"/>
-            <label for="session-sort">Order</label>
-            <select id="session-sort" class="form-control" name="sort">
-                <option value="codigo" <%= "codigo".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>ID</option>
-                <option value="nombre" <%= "nombre".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>Nombre</option>
-                <option value="apellido" <%= "apellido".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>Apellido</option>
-            </select>
+            <div class="pr-item">
+                <label for="session-total" style="display: none;">Current page</label>
+                <input type="hidden" id="session-page" value="<%= currentPage %>"/>
+            </div>
+            <div class="pr-item">
+                <label for="session-size">Size</label>
+                <input id="session-size" value="<%= pageOfUsers.getSize() %>" class="form-control"/>
+            </div>
+
+            <div class="pr-item">
+                <label for="session-sort">Order</label>
+                <select id="session-sort" class="form-control" name="sort">
+                    <option value="codigo" <%= "codigo".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>
+                        ID
+                    </option>
+                    <option value="nombre" <%= "nombre".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>
+                        Nombre
+                    </option>
+                    <option value="apellido" <%= "apellido".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>
+                        Apellido
+                    </option>
+                    <option value="correo" <%= "correo".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>
+                        Correo
+                    </option>
+                    <option value="usuario" <%= "usuario".equals(pageOfUsers.getSort().getOrder()) ? "selected" : "" %>>
+                        Usuario
+                    </option>
+                </select>
+            </div>
             <%
                 String direction = "false";
                 if (Sort.Direction.ASC == pageOfUsers.getSort().getDirection()) {
                     direction = "true";
                 }
             %>
-            <label for="session-direction">Direction</label>
-            <select id="session-direction" class="form-control">
-                <option value="true" <%= (direction.equals("true")) ? "selected" : "" %>>ASC</option>
-                <option value="false" <%= (direction.equals("false")) ? "selected" : "" %>>DESC</option>
-            </select>
+            <div class="pr-item">
+                <label for="session-direction">Direction</label>
+                <select id="session-direction" class="form-control">
+                    <option value="true" <%= (direction.equals("true")) ? "selected" : "" %>>ASC</option>
+                    <option value="false" <%= (direction.equals("false")) ? "selected" : "" %>>DESC</option>
+                </select>
+            </div>
         </div>
 
         <div class="table-container mt-3">
@@ -172,11 +200,6 @@
         const size = document.getElementById('session-size').value;
         const sort = document.getElementById('session-sort').value;
         const direction = document.getElementById('session-direction').value;
-
-        console.log('Page number:', pageNumber);
-        console.log('Size:', size);
-        console.log('Sort:', sort);
-        console.log('Direction:', direction);
 
         $.ajax({
             url: `${pageContext.request.contextPath}/usuario`,
