@@ -67,15 +67,35 @@
 
 .grid-container .page-request {
     display: grid;
-    grid-template-columns: repeat(6, 50px);
+    grid-template-columns: repeat(4, 170px);
     grid-template-rows: 50px;
     justify-content: center;
     align-items: center;
+    grid-gap: 10px;
+}
+
+.page-request .pr-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 10px;
+    border-radius: 5px;
+    color: var(--card-text-color);
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .grid-container label {
     font-size: 14px;
     font-weight: 500;
     color: var(--card-text-color);
+}
+
+.pr-item .form-control {
+    max-width: 80px;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 10px;
 }

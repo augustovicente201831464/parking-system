@@ -6,11 +6,12 @@ import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
+import com.cunoc.edu.gt.exception.AuthorizeException;
 import com.cunoc.edu.gt.exception.BadOperationException;
 import com.cunoc.edu.gt.input.handling.auth.UserControllerHandling;
 import com.cunoc.edu.gt.input.handling.pagination.PaginationHandling;
 import com.cunoc.edu.gt.output.persistence.adapter.auth.UserPA;
-import com.cunoc.edu.gt.service.auth.   UserService;
+import com.cunoc.edu.gt.service.auth.UserService;
 import com.cunoc.edu.gt.ucextends.auth.UserUC;
 import com.cunoc.edu.gt.proxies.TransactionalInterceptor;
 import com.cunoc.edu.gt.proxies.ValidatorInterceptor;
@@ -125,6 +126,10 @@ public class UserController extends HttpServlet {
                     Throwable rootCause = e;
                     while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
                         rootCause = rootCause.getCause();
+                    }
+
+                    if (rootCause instanceof AuthorizeException) {
+                        throw e;
                     }
 
                     req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());

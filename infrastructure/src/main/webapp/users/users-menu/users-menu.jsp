@@ -25,7 +25,7 @@
     </a>
 
     <script>
-        function loadUserPageFromMenu(pageNumber = 1, size = 5, sort = 'codigo', direction = 'true') {
+        function loadUserPageFromMenu(pageNumber = 1, size = 15, sort = 'codigo', direction = 'true') {
             $.ajax({
                 url: `${pageContext.request.contextPath}/usuario`,
                 method: 'POST',
@@ -40,7 +40,11 @@
                     $('#dynamic-content').html(data);
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error loading user page:', error);
+                    if (xhr.status === 403) {
+                        window.location.href = `${pageContext.request.contextPath}/main/home/home.jsp`;
+                    } else {
+                        console.error('Error loading user page:', error);
+                    }
                 }
             });
         }

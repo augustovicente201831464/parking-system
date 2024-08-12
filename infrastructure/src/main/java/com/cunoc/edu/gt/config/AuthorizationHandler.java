@@ -1,6 +1,7 @@
 package com.cunoc.edu.gt.config;
 
 import com.cunoc.edu.gt.annotations.auth.PreAuthorize;
+import com.cunoc.edu.gt.exception.AuthorizeException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Setter;
 
@@ -27,7 +28,7 @@ public class AuthorizationHandler implements InvocationHandler {
                 Logger.getLogger("AuthorizationHandler").info("Access granted");
                 return method.invoke(target, args);
             } else {
-                throw new IllegalAccessException("You do not have permission to access this resource.");
+                throw new AuthorizeException("You do not have permission to access this resource.");
             }
         }
 
