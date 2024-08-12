@@ -18,7 +18,7 @@
 
     <% if (displayableUserItem) { %>
     <div class="grid-item"
-         onclick="location.href='${pageContext.request.contextPath}/administration/main-users/main-users.jsp';">
+         onclick="location.href='${pageContext.request.contextPath}/main/main-users/main-users.jsp';">
         <i class="fa fa-users"></i>
         <div class="a-index">Usuarios</div>
     </div>
@@ -26,7 +26,7 @@
 
     <% if (displayableVehicleItem) { %>
     <div class="grid-item"
-         onclick="location.href='${pageContext.request.contextPath}/administration/main-vehicles/main-vehicles.jsp';">
+         onclick="location.href='${pageContext.request.contextPath}/main/main-vehicles/main-vehicles.jsp';">
         <i class="fa fa-car"></i>
         <div class="a-index">Vehículos</div>
     </div>
@@ -34,7 +34,7 @@
 
     <% if (displayableCustomerItem) { %>
     <div class="grid-item"
-         onclick="location.href='${pageContext.request.contextPath}/administration/main-customers/main-customers.jsp';">
+         onclick="location.href='${pageContext.request.contextPath}/main/main-customers/main-customers.jsp';">
         <i class="fa fa-user-tag"></i>
         <div class="a-index">Clientes</div>
     </div>

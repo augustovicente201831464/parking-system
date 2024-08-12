@@ -27,7 +27,7 @@ public class PageRequest extends AbstractPageRequest {
 
     @Override
     public Sort getSort() {
-        return null;
+        return sort;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class PageRequest extends AbstractPageRequest {
         return null;
     }
 
-    public PageRequest withSort(Sort.Direction direction, String... properties) {
-        return new PageRequest(getPageNumber(), getPageSize(), Sort.by(direction, properties));
+    public PageRequest withSort(Sort.Direction direction, String order) {
+        return new PageRequest(getPageNumber(), getPageSize(), Sort.by(direction, order));
     }
 
     @Override
@@ -61,8 +61,10 @@ public class PageRequest extends AbstractPageRequest {
 
     protected PageRequest(int pageNumber, int pageSize, Sort sort) {
         super(pageNumber, pageSize);
+        this.sort = sort;
     }
 
     @Serial
     private static final long serialVersionUID = -4541509938956089562L;
+    private final Sort sort;
 }

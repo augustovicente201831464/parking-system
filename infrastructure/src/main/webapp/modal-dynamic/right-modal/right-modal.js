@@ -18,7 +18,7 @@ function closeRightModal() {
 
 window.onclick = function(event) {
     const modal = document.getElementById("right-modal");
-    if (event.target == modal) {
+    if (event.target === modal) {
         modal.style.display = "none";
     }
 }

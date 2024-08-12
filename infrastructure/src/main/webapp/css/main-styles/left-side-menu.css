@@ -1,0 +1,98 @@
+.left--side-menu .content{
+    background-color: var(--bg-left-side-menu);
+    overflow: hidden;
+}
+
+/** Left side menu scroll for content*/
+.left--side-menu .content:hover {
+    overflow: auto;
+}
+
+.left--side-menu .content::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.left--side-menu .content::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color);
+    border-radius: 8px;
+}
+
+.left--side-menu .content:hover::-webkit-scrollbar-thumb {
+    overflow: auto;
+}
+
+.left--side-menu nav {
+    height: 100%;
+}
+
+.left--side-menu a {
+    position: relative;
+    text-decoration: none;
+    color: var(--bg-left-side-menu);
+    font-size: 13px;
+}
+
+.left--side-menu a {
+    display: table;
+}
+
+.left--side-menu .fa-menu {
+    position: relative;
+    width: 70px;
+    height: 37px;
+    text-align: center;
+    top: 6px;
+    font-size: 20px;
+    color: var(--left-side-menu-fa-color);
+}
+
+.left--side-menu nav .nav-text {
+    position: relative;
+    top: 6px;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--left-side-menu-nav-color);
+}
+
+.left--side-menu a:hover {
+    color: var(--bg-left-side-menu);
+    background-color: var(--left-side-menu-a-hover-bg-color);
+    border-radius: 0 20px 20px 0;
+}
+
+.left--side-menu a {
+    width: 235px;
+    height: 26px;
+}
+
+.left--side-menu nav {
+    width: 70px;
+}
+
+.left--side-menu nav {
+    overflow: hidden;
+}
+
+.left--side-menu nav:hover {
+    width: 260px;
+    transition: 0.4s;
+}
+
+.left--side-menu .label {
+    height: 35px;
+    width: 70px;
+    opacity: 0;
+}
+
+.left--side-menu nav:hover>.label {
+    height: 35px;
+    width: 250px;
+    opacity: 1;
+    text-align: center;
+}
+
+.left--side-menu .title-menu{
+    font-weight: 400;
+    color: var(--left-side-menu-nav-color);
+}

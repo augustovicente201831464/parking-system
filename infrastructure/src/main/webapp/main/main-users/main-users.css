@@ -1,0 +1,18 @@
+@import url('../../css/main-styles/style.css');
+@import url('../../main/main-menu/main-menu.css');
+@import url('../../users/users-list/users-list.css');
+@import url('../../users/users-report/users-report.css');
+
+
+.user .wrapper {
+    display: flex;
+    height: 94.3%;
+}
+
+.user .left--side-menu {
+    border: none;
+}
+.user .content-comp {
+    width: 100%;
+    height: 100%;
+}

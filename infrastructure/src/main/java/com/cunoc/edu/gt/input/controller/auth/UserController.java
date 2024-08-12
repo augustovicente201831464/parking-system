@@ -4,12 +4,11 @@ import com.cunoc.edu.gt.config.AuthorizationHandler;
 import com.cunoc.edu.gt.connection.CustomizedConnection;
 import com.cunoc.edu.gt.constants.AttributeNameConstant;
 import com.cunoc.edu.gt.constants.FilenameConstant;
-import com.cunoc.edu.gt.data.pagination.util.PageRequest;
-import com.cunoc.edu.gt.data.pagination.util.Sort;
 import com.cunoc.edu.gt.data.request.auth.UserLoginRequest;
 import com.cunoc.edu.gt.data.request.auth.UserRequest;
 import com.cunoc.edu.gt.exception.BadOperationException;
 import com.cunoc.edu.gt.input.handling.auth.UserControllerHandling;
+import com.cunoc.edu.gt.input.handling.pagination.PaginationHandling;
 import com.cunoc.edu.gt.output.persistence.adapter.auth.UserPA;
 import com.cunoc.edu.gt.service.auth.   UserService;
 import com.cunoc.edu.gt.ucextends.auth.UserUC;
@@ -27,6 +26,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -118,15 +118,9 @@ public class UserController extends HttpServlet {
             }
             case "get-page" -> {
                 try {
-
-                    int page = Integer.parseInt(req.getParameter(AttributeNameConstant.PAGE) == null ? "1" : req.getParameter(AttributeNameConstant.PAGE));
-                    int size = Integer.parseInt(req.getParameter(AttributeNameConstant.SIZE) == null ? "10" : req.getParameter(AttributeNameConstant.SIZE));
-                    String orders = req.getParameter(AttributeNameConstant.SORT) == null ? "id" : req.getParameter(AttributeNameConstant.SORT);
-                    boolean asc = Boolean.parseBoolean(req.getParameter(AttributeNameConstant.DIRECTION) == null ? "true" : req.getParameter(AttributeNameConstant.DIRECTION));
-
-                    req.getSession().setAttribute(AttributeNameConstant.PAGE_USER, service.getPage(PageRequest.of(page, size, Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, orders))));
+                    req.getSession().setAttribute(AttributeNameConstant.PAGE_USER, service.getPage(PaginationHandling.handlePagination(req)));
                     Logger.getLogger("UserController").info("User page retrieved successfully.");
-                    res.sendRedirect(FilenameConstant.HOME_JSP); // For test purposes
+                    req.getRequestDispatcher("/users/users-list/users-list.jsp").forward(req, res);
                 } catch (Exception e) {
                     Throwable rootCause = e;
                     while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
@@ -135,9 +129,9 @@ public class UserController extends HttpServlet {
 
                     req.getSession().setAttribute(AttributeNameConstant.ERROR, rootCause.getMessage());
                     Logger.getLogger("UserController").info("User page retrieval failed: " + rootCause.getMessage());
-                    res.sendRedirect(FilenameConstant.HOME_JSP);
+                    //Logger.getLogger("UserController").info("Stack trace: " + Arrays.toString(rootCause.getStackTrace()));
+                    res.sendRedirect(FilenameConstant.USERS_LIST_JSP);
                 }
-
             }
             default ->
                     throw new BadOperationException(String.format("In the %s method of %s the action is invalid.", "POST", "UserController"));

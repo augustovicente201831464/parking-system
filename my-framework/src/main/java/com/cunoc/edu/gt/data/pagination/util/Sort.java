@@ -2,6 +2,7 @@ package com.cunoc.edu.gt.data.pagination.util;
 
 import com.cunoc.edu.gt.utils.Assert;
 import com.cunoc.edu.gt.utils.StringUtils;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -13,7 +14,22 @@ public class Sort {
     private static final long serialVersionUID = 5737186511678863905L;
     private static final Sort UNSORTED = Sort.by(new Order[0]);
     public static final Direction DEFAULT_DIRECTION = Direction.ASC;
-    private final List<Order> orders;
+    private List<Order> orders;
+
+    @Getter
+    private Direction direction;
+
+    @Getter
+    private String order;
+
+    private Sort(Direction direction, String order) {
+        this.direction = direction;
+        this.order = order;
+    }
+
+    public static Sort by(Direction direction, String order){
+       return new Sort(direction, order);
+    }
 
     protected Sort(List<Order> orders) {
         this.orders = orders;

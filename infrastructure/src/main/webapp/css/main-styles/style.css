@@ -6,6 +6,7 @@
 
 /* My custom styles */
 @import url('../../css/main-styles/my-theme.css');
+@import url('../../css/main-styles/left-side-menu.css');
 @import url('../../modal-dynamic/form-modal/form-modal.css');
 @import url('../../modal-dynamic/right-modal/right-modal.css');
 
